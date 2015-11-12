@@ -1,0 +1,12 @@
+body {
+    background: #004756;
+}
+
+.gridster {
+    margin: 0 auto;
+}
+
+.gridster .gs-w {
+    background: white;
+}
+
