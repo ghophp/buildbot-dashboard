@@ -1,6 +1,11 @@
 body {
-    background: #004756;
+    margin: 0;
+    background-color: #A5D6A7;
+    font-size: 20px;
+    color: white;
+    font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+
 
 .gridster {
     margin: 0 auto;
@@ -10,3 +15,29 @@ body {
     background: white;
 }
 
+/** ---- Widgets Base ---- */
+
+.widget-wrapper {
+    display: table;
+    cursor: pointer;
+}
+
+.widget {
+    padding: 25px 12px;
+    text-align: center;
+    width: 100%;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.widget[data-status="build"] {
+    background-color: #1B5E20;
+}
+
+.widget[data-status="building"] {
+    background-color: #424242;
+}
+
+.widget[data-status="error"] {
+    background-color: #DD2C00;
+}

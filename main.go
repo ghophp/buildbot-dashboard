@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/ghophp/buildbot-dashing/config"
 	"github.com/ghophp/buildbot-dashing/container"
 	"github.com/ghophp/buildbot-dashing/handler"
 	"github.com/go-martini/martini"
@@ -30,5 +31,5 @@ func NewRouter(c *container.ContainerBag) *martini.ClassicMartini {
 }
 
 func main() {
-	NewRouter(container.NewContainerBag()).Run()
+	NewRouter(container.NewContainerBag(config.NewConfig())).Run()
 }

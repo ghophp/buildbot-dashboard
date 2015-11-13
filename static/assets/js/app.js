@@ -13,10 +13,13 @@ $(function(){
 
     $.get("/builders", function(data) {
         _.each(_.keys(data), function(key, i){
-            var builder = data[key];
-            gridster.add_widget('<li class="new">'+key+'</li>', 2, 2);
+            var builder = data[key]; builder.id = key;
+
+            gridster.add_widget('<li class="new widget-wrapper" id="'+key+'"></li>', 2, 2);
+
+            ReactDOM.render(
+                React.createElement(BuildWidget, { builder: builder }),
+                $("#"+key)[0]);
         });
     });
 });
-
-//<li data-row="1" data-col="1" data-sizex="1" data-sizey="1"></li>
