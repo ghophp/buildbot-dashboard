@@ -9,8 +9,10 @@ type Config struct {
 }
 
 func NewConfig() *Config {
-	buildbot := *flag.String("buildbot", buildBotUrl, "buildbot url eg. http://10.0.0.1/")
+	buildbot := flag.String("buildbot", buildBotUrl, "buildbot url eg. http://10.0.0.1/")
+	flag.Parse()
+
 	return &Config{
-		BuildBotUrl: buildbot,
+		BuildBotUrl: *buildbot,
 	}
 }

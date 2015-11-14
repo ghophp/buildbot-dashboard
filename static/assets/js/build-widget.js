@@ -17,6 +17,21 @@ var BuildWidget = React.createClass({
                 { className: "title" },
                 this.props.builder.id
             ),
+            React.createElement(
+                "h2",
+                { className: "value" },
+                this.props.builder.cachedBuilds.length
+            ),
+            React.createElement(
+                "p",
+                { className: "more-info" },
+                "cached builds"
+            ),
+            React.createElement(
+                "p",
+                { className: "updated-at" },
+                "Last updated at 12:00"
+            ),
             this.props.children
         );
     }

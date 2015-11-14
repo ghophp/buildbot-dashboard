@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"fmt"
+
 	"github.com/ghophp/buildbot-dashing/container"
 	"github.com/martini-contrib/render"
 )
@@ -27,6 +29,7 @@ func NewBuildersHandler(c *container.ContainerBag) *BuildersHandler {
 }
 
 func (h BuildersHandler) ServeHTTP(r render.Render) {
+	fmt.Printf(h.c.BuildBotUrl + "json/builders/?as_text=1")
 	req, _ := http.Get(h.c.BuildBotUrl + "json/builders/?as_text=1")
 	defer req.Body.Close()
 

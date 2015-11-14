@@ -15,11 +15,11 @@ $(function(){
         _.each(_.keys(data), function(key, i){
             var builder = data[key]; builder.id = key;
 
-            gridster.add_widget('<li class="new widget-wrapper" id="'+key+'"></li>', 2, 2);
+            gridster.add_widget('<li class="new"><div id="'+key+'" class="widget-wrapper"></div></li>', 2, 2);
 
             ReactDOM.render(
                 React.createElement(BuildWidget, { builder: builder }),
-                $("#"+key)[0]);
+                document.getElementById(key));
         });
     });
 });

@@ -1,11 +1,10 @@
 body {
     margin: 0;
-    background-color: #A5D6A7;
+    background-color: #222222;
     font-size: 20px;
     color: white;
     font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-
 
 .gridster {
     margin: 0 auto;
@@ -20,6 +19,8 @@ body {
 .widget-wrapper {
     display: table;
     cursor: pointer;
+    width: 100%;
+    height: 100%;
 }
 
 .widget {
@@ -30,14 +31,45 @@ body {
     vertical-align: middle;
 }
 
+.widget h1.title {
+    margin-bottom: 12px;
+    text-align: center;
+    font-size: 30px;
+    font-weight: 400;
+}
+
+.widget h2.value {
+    text-transform: uppercase;
+    font-size: 76px;
+    font-weight: 700;
+}
+
+.widget p.more-info {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 15px;
+    position: absolute;
+    bottom: 32px;
+    left: 0;
+    right: 0;
+}
+
+.widget p.updated-at {
+    color: rgba(0, 0, 0, 0.3);
+    font-size: 15px;
+    position: absolute;
+    bottom: 12px;
+    left: 0;
+    right: 0;
+}
+
 .widget[data-status="build"] {
-    background-color: #1B5E20;
+    background-color: #63bd4e;
 }
 
 .widget[data-status="building"] {
-    background-color: #424242;
+    background-color: #f3bb33;
 }
 
 .widget[data-status="error"] {
-    background-color: #DD2C00;
+    background-color: #f04245;
 }
