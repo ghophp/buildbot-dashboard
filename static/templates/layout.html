@@ -16,9 +16,15 @@
 
 		<!-- Style -->
 		<link rel="stylesheet" href="css/app.css">
+		<link rel="stylesheet" href="css/size/{{ genericSize }}.css">
 	</head>
 	<body>
 		{{ yield }}
+
+		<script type="text/javascript">
+			var genericSize = "{{ genericSize }}";
+			var ws = null; // hold the ws connection
+		</script>
 
 		<!-- Vendors -->
 		<script src="js/react.min.js"></script>

@@ -24,7 +24,6 @@ body {
 }
 
 .widget {
-    padding: 25px 12px;
     text-align: center;
     width: 100%;
     display: table-cell;
@@ -32,32 +31,26 @@ body {
 }
 
 .widget h1.title {
-    margin-bottom: 12px;
     text-align: center;
-    font-size: 30px;
     font-weight: 400;
+    word-wrap: break-word;
 }
 
 .widget h2.value {
     text-transform: uppercase;
-    font-size: 76px;
     font-weight: 700;
 }
 
 .widget p.more-info {
     color: rgba(255, 255, 255, 0.7);
-    font-size: 15px;
     position: absolute;
-    bottom: 32px;
     left: 0;
     right: 0;
 }
 
 .widget p.updated-at {
     color: rgba(0, 0, 0, 0.3);
-    font-size: 15px;
     position: absolute;
-    bottom: 12px;
     left: 0;
     right: 0;
 }

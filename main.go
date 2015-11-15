@@ -1,6 +1,8 @@
 package main
 
 import (
+	"html/template"
+
 	"github.com/ghophp/buildbot-dashing/config"
 	"github.com/ghophp/buildbot-dashing/container"
 	"github.com/ghophp/buildbot-dashing/handler"
@@ -12,6 +14,7 @@ func NewRouter(c *container.ContainerBag) *martini.ClassicMartini {
 	var (
 		indexHandler    = handler.NewIndexHandler(c)
 		buildersHandler = handler.NewBuildersHandler(c)
+		wsHandler       = handler.NewWsHandler(c)
 	)
 
 	router := martini.Classic()
@@ -22,9 +25,17 @@ func NewRouter(c *container.ContainerBag) *martini.ClassicMartini {
 		Extensions: []string{".tmpl", ".html"},
 		Charset:    "UTF-8",
 		IndentJSON: true,
+		Funcs: []template.FuncMap{
+			{
+				"genericSize": func() string {
+					return c.GenericSize
+				},
+			},
+		},
 	}))
 
 	router.Get("/", indexHandler.ServeHTTP)
+	router.Get("/ws", wsHandler.ServeHTTP)
 	router.Get("/builders", buildersHandler.ServeHTTP)
 
 	return router

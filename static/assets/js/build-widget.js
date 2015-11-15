@@ -20,7 +20,7 @@ var BuildWidget = React.createClass({
             React.createElement(
                 "h2",
                 { className: "value" },
-                this.props.builder.cachedBuilds.length
+                this.props.builder.cachedBuilds ? this.props.builder.cachedBuilds.length : 0
             ),
             React.createElement(
                 "p",

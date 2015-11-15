@@ -1,0 +1,25 @@
+.widget {
+    padding: 25px 12px;
+}
+
+.widget h1.title {
+    margin-bottom: 12px;
+    font-size: 30px;
+    max-width: 276px;
+}
+
+.widget h2.value {
+    font-size: 76px;
+}
+
+.widget p.more-info {
+    font-size: 15px;
+    bottom: 32px;
+    left: 0;
+    right: 0;
+}
+
+.widget p.updated-at {
+    font-size: 15px;
+    bottom: 12px;
+}
