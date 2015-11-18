@@ -2,8 +2,10 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"net"
 	"net/http"
+	"strconv"
 	"time"
 
 	"io/ioutil"
@@ -20,10 +22,23 @@ type (
 	}
 
 	Builder struct {
-		Id           string `json:"id"`
-		BaseDir      string `json:"basedir"`
-		CachedBuilds []int  `json:"cachedBuilds"`
-		State        string `json:"state"`
+		Id           string   `json:"id"`
+		CachedBuilds []int    `json:"cachedBuilds"`
+		State        string   `json:"state"`
+		Reason       string   `json:"reason"`
+		Blame        []string `json:"blame"`
+		Number       int      `json:"number"`
+		Slave        string   `json:"slave"`
+		LastUpdate   string   `json:"last_update"`
+	}
+
+	DetailedBuilder struct {
+		Blame  []string  `json:"blame"`
+		Number int       `json:"number"`
+		Reason string    `json:"reason"`
+		Slave  string    `json:"slave"`
+		Times  []float64 `json:"times"`
+		Text   []string  `json:"text"`
 	}
 )
 
@@ -39,22 +54,41 @@ func dialTimeout(network, addr string) (net.Conn, error) {
 	return net.DialTimeout(network, addr, timeout)
 }
 
-func GetBuilder(c *container.ContainerBag, id string) (Builder, error) {
-	var b Builder
+func GetBuilder(c *container.ContainerBag, id string, builder Builder) (Builder, error) {
+	var b map[string]DetailedBuilder
 
-	req, err := http.Get(c.BuildBotUrl + "json/builders/" + id + "?as_text=1")
+	req, err := http.Get(c.BuildBotUrl + "json/builders/" + id + "/builds?select=-1&select=-1&as_text=1")
 	if err != nil {
-		return b, err
+		return builder, err
 	}
 
 	defer req.Body.Close()
 
 	decoder := json.NewDecoder(req.Body)
 	if err := decoder.Decode(&b); err != nil {
-		return b, err
+		return builder, err
 	}
 
-	return b, nil
+	if current, ok := b["-1"]; ok {
+
+		builder.Id = id
+		builder.Blame = current.Blame
+		builder.Number = current.Number
+		builder.Slave = current.Slave
+		builder.Reason = current.Reason
+		builder.LastUpdate = strconv.Itoa(int(time.Now().Unix()))
+
+		if len(current.Times) > 0 {
+			builder.LastUpdate = strconv.FormatFloat(current.Times[0], 'f', 6, 64)
+		}
+		if len(current.Text) > 0 {
+			builder.State = current.Text[1]
+		}
+
+		return builder, nil
+	}
+
+	return builder, fmt.Errorf("[GetBuilder] %s", "no last build defined")
 }
 
 func GetBuilders(c *container.ContainerBag) (map[string]Builder, error) {

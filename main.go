@@ -30,6 +30,9 @@ func NewRouter(c *container.ContainerBag) *martini.ClassicMartini {
 				"genericSize": func() string {
 					return c.GenericSize
 				},
+				"buildbotUrl": func() string {
+					return c.BuildBotUrl
+				},
 			},
 		},
 	}))

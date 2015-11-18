@@ -55,7 +55,15 @@ body {
     right: 0;
 }
 
+.widget[data-status="idle"] {
+    background-color: #1d99d4;
+}
+
 .widget[data-status="build"] {
+    background-color: #63bd4e;
+}
+
+.widget[data-status="successful"] {
     background-color: #63bd4e;
 }
 

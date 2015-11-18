@@ -3,15 +3,39 @@ var BuildWidget = React.createClass({
         builder: React.PropTypes.any.isRequired
     },
     getInitialState: function getInitialState() {
-        return { status: "build" };
+        return { 
+            status: "build",
+            last_build: this.getLastBuildNumber(),
+            last_update: ''
+        };
     },
-    tick() {
-        this.setState({ status: "building" }); console.log('ok');
+    getLastBuildNumber() {
+        var c = this.props.builder.cachedBuilds;
+        return c && c.length ? c[c.length - 1] : 0;
+    },
+    openDetails() {
+        window.open(buildbotUrl + 'builders/' + this.props.builder.id);
+    },
+    updateBuilder(builder) {
+        console.log(builder);
+        this.props.builder = builder;
+
+        var now = moment();
+        if (this.props.builder.last_update) {
+            var t = new String(this.props.builder.last_update);
+            now = moment(t.substr(0, t.length - 3), "X");
+        }
+
+        this.setState({ 
+            status: builder.state, 
+            last_build: this.getLastBuildNumber(),
+            last_update: now.format('MMMM Do YYYY, HH:mm:ss') 
+        });
     },
     render: function() {
         return React.createElement(
             "div",
-            { className: "widget new", "data-status": this.state.status, onClick: this.tick.bind(this) },
+            { className: "widget new", "data-status": this.state.status, onClick: this.openDetails.bind(this) },
             React.createElement(
                 "h1",
                 { className: "title" },
@@ -20,7 +44,7 @@ var BuildWidget = React.createClass({
             React.createElement(
                 "h2",
                 { className: "value" },
-                this.props.builder.cachedBuilds ? this.props.builder.cachedBuilds.length : 0
+                this.state.last_build
             ),
             React.createElement(
                 "p",
@@ -30,7 +54,7 @@ var BuildWidget = React.createClass({
             React.createElement(
                 "p",
                 { className: "updated-at" },
-                "Last updated at 12:00"
+                this.state.last_update
             ),
             this.props.children
         );

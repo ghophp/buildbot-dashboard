@@ -56,10 +56,9 @@ func MonitorBuilders(c *container.ContainerBag) {
 				return
 			}
 
-			for id, _ := range builders {
-				b, err := GetBuilder(c, id)
+			for id, builder := range builders {
+				b, err := GetBuilder(c, id, builder)
 				if err == nil {
-					b.Id = id
 					if r, err := json.Marshal(b); err == nil {
 						broadcastMessage(websocket.TextMessage, r)
 					}

@@ -11,7 +11,7 @@ $(function(){
         widget_margins: [10, 10],
         autogrow_cols: true,
         resize: {
-            enabled: true
+            enabled: false
         }
     });
 
@@ -45,7 +45,7 @@ $(function(){
 
             var builder = $.parseJSON(event.data);
             if (widgets[builder.id]) {
-                console.log(widgets[builder.id]);
+                widgets[builder.id].updateBuilder(builder);
             }
         };
     });
