@@ -33,6 +33,12 @@ var BuildWidget = React.createClass({
         });
     },
     render: function() {
+
+        var loadingEl = null;
+        if (this.state.status === 'building') {
+            loadingEl = React.createElement(LoadingWidget, {});
+        }
+
         return React.createElement(
             "div",
             { className: "widget new", "data-status": this.state.status, onClick: this.openDetails.bind(this) },
@@ -56,6 +62,7 @@ var BuildWidget = React.createClass({
                 { className: "updated-at" },
                 this.state.last_update
             ),
+            loadingEl,
             this.props.children
         );
     }

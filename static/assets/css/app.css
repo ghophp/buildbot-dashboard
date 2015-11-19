@@ -74,3 +74,33 @@ body {
 .widget[data-status="error"] {
     background-color: #f04245;
 }
+
+/** ---- Loading Bar ---- */
+
+.loading-container {
+    position: absolute;
+    transform: translateX(-50%) translateY(-50%);
+}
+.dot {
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    float: left;
+}
+
+.red {
+    background: #f66a70;
+}
+
+.green {
+    background: #9ecb42;
+}
+
+.blue {
+    background: #21acf9;
+}
+
+.purple {
+    background: #cd79f0;
+}

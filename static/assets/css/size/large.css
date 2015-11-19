@@ -23,3 +23,12 @@
     font-size: 15px;
     bottom: 12px;
 }
+
+.loading-container {
+    bottom: 60px;
+    left: 54%;
+}
+
+.dot {
+    margin-right: 20px;
+}

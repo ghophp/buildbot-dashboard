@@ -21,3 +21,12 @@
     font-size: 12px;
     bottom: 12px;
 }
+
+.loading-container {
+    bottom: 50px;
+    left: 52%;
+}
+
+.dot {
+    margin-right: 10px;
+}
