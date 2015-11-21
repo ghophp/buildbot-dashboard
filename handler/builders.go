@@ -15,11 +15,10 @@ import (
 )
 
 const (
-	BuildersCache string = "builders.json"
-
 	buildingState   string = "building"
 	failedState     string = "failed"
 	successfulState string = "successful"
+	warningState    string = "warnings"
 )
 
 type (
@@ -94,6 +93,8 @@ func GetBuilder(c *container.ContainerBag, id string, builder Builder) (Builder,
 			} else if current.Text[1] == successfulState {
 				builder.State = successfulState
 			}
+		} else if len(current.Text) == 1 && current.Text[0] == warningState {
+			builder.State = warningState
 		}
 
 		return builder, nil
@@ -105,7 +106,7 @@ func GetBuilder(c *container.ContainerBag, id string, builder Builder) (Builder,
 func GetBuilders(c *container.ContainerBag) (map[string]Builder, error) {
 	var data map[string]Builder
 
-	dataBytes, err := c.Cache.GetCache(BuildersCache)
+	dataBytes, err := c.Cache.GetCache(c.HashedUrl)
 	if err != nil {
 		req, err := http.Get(c.BuildBotUrl + "json/builders/?as_text=1")
 		if err != nil {
@@ -118,14 +119,28 @@ func GetBuilders(c *container.ContainerBag) (map[string]Builder, error) {
 		if err != nil {
 			return nil, err
 		}
-	}
 
-	if err := c.Cache.SetCache(BuildersCache, dataBytes); err != nil {
-		return nil, err
+		if err := c.Cache.SetCache(c.HashedUrl, dataBytes); err != nil {
+			return nil, err
+		}
 	}
 
 	if err = json.Unmarshal(dataBytes, &data); err != nil {
 		return nil, err
+	}
+
+	if c.FilterRegex != nil {
+		var del []string
+		for key, _ := range data {
+			if !c.FilterRegex.MatchString(key) {
+				del = append(del, key)
+			}
+		}
+		if len(del) > 0 {
+			for _, k := range del {
+				delete(data, k)
+			}
+		}
 	}
 
 	return data, nil

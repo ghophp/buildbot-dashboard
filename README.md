@@ -1,10 +1,29 @@
 # buildbot-dashing [![Gitter](https://badges.gitter.im/gitterHQ/gitter.svg)](https://gitter.im/ghophp/buildbot-dashboard)
-If you have a buildbot setup at your company, it is really ugly to put it into a central display and follow the builds. This project aims to be the interface that will allow you to do that.
+If you have a CI/CD setup, it is really important to keep a central display and follow the builds and process going on the CI tool. This project aims to be the dashboard that will allow you to do present better results at a central display with `buildbot`.
 
-## Precompiled Binaries
-The project has some precompiled binaries at the release area, so please take a look if any of the releases match your environment, so you can just download the binary and run normally with:
+## Download [![Build Status](https://semaphoreci.com/api/v1/projects/44130239-880c-468f-9fa7-b976a355676a/611030/badge.svg)](https://semaphoreci.com/ghophp/buildbot-dashboard)
+The project has some precompiled binaries, if your enviroment match one of the releases above, this is the most simple way to use this project.
+
+- [OSX](https://github.com/ghophp/buildbot-dashboard/raw/master/bb_dash_osx.zip)
+- [Linux x32](https://github.com/ghophp/buildbot-dashboard/raw/master/bb_dash_linux32.zip)
+- [Linux x64](https://github.com/ghophp/buildbot-dashboard/raw/master/bb_dash_linux64.zip)
+
+## Running
+`buildbot` is the only required flag, you must provide the base url of the running builbot.
 ```sh
-$ ./buildbot-dashboard --buildbot="http://10.0.0.1/"
+$ ./buildbot_dashboard -h
+-buildbot string
+	buildbot url eg. http://10.0.0.1/
+-empty
+	show builders with no builds (default false)
+-filter string
+	regex applied over the builder name
+-invalidate int
+	cache invalidate in seconds (default and min 5 minutes) (default 10)
+-refresh int
+	refresh rate in seconds (default and min 10 seconds) (default 10)
+-size string
+	generic ui size (small|large default large) (default "large")
 ```
 
 ## Manual Build
@@ -17,5 +36,15 @@ $ buildbot-dashboard --buildbot="http://10.0.0.1/"
 ```
 This will fetch the version directly from github and install it on `$GOPATH/bin`, if you have `$GOPATH/bin` at your `$PATH` then you can run from everywhere the command.
 
-## Interface
-When the project run, you should be able to access your localhost at the port 3000 (configurable via `PORT` env variable) and see the following:
+## Features
+- Non-reload monitoring through `websockets`
+- Enhanced UI with better visualization of the builders
+- Easy usage with single command
+- `Filter` options allow you to just show what matters
+
+## Preview
+![Apache Board](/preview/preview_apache.gif?raw=true "Apache Board")
+
+## Todo
+- Allow a totally compressed size to boards with a lot of builders
+- Create a fully adapted mode, that by the size of the display, and the number of the projects, keep "walking" through the multiple screens

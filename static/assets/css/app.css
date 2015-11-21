@@ -67,10 +67,6 @@ body {
     right: 0;
 }
 
-.widget[data-status="idle"] {
-    background-color: #1d99d4;
-}
-
 .widget[data-status="build"] {
     background-color: #63bd4e;
 }
@@ -81,6 +77,10 @@ body {
 
 .widget[data-status="building"] {
     background-color: #f3bb33;
+}
+
+.widget[data-status="warnings"] {
+    background-color: #FF8F03;
 }
 
 .widget[data-status="failed"] {

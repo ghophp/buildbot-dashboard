@@ -74,7 +74,7 @@ var BuildWidget = React.createClass({
             React.createElement(
                 "h2",
                 { className: "value" },
-                this.state.last_build
+                this.state.last_build > 0 ? this.state.last_build : '-'
             ),
             React.createElement(
                 "p",

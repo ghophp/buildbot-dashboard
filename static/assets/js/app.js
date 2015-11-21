@@ -1,5 +1,7 @@
 $(function(){
 
+    var GRIDSTER_HASHED_KEY = hashedUrl + 'gridster';
+
     // more sizes can be implemented in the future
     var currentSizeDimension = [140, 140];
     if (genericSize == 'small') {
@@ -22,7 +24,7 @@ $(function(){
         draggable: {
             stop: function() {
                 if (localStorage) {
-                    localStorage.setItem('gridster', JSON.stringify(gridster.serialize()));
+                    localStorage.setItem(GRIDSTER_HASHED_KEY, JSON.stringify(gridster.serialize()));
                 }
             }
         },
@@ -36,10 +38,14 @@ $(function(){
     $.get("/builders", function(data) {
         _.each(_.keys(data), function(key, i){
             var builder = data[key]; builder.id = key;
+            if (!displayEmptyBuilder && (!builder.cachedBuilds || builder.cachedBuilds.length <= 0)) {
+                return;
+            }
+
             var positions = null;
 
-            if (localStorage && localStorage.getItem('gridster')) {
-                positions = $.parseJSON(localStorage.getItem('gridster'));
+            if (localStorage && localStorage.getItem(GRIDSTER_HASHED_KEY)) {
+                positions = $.parseJSON(localStorage.getItem(GRIDSTER_HASHED_KEY));
             }
 
             var html = '<li class="new"><div id="'+key+'" class="widget-wrapper"></div></li>';
@@ -57,8 +63,8 @@ $(function(){
                 React.createElement(BuildWidget, { builder: builder }),
                 document.getElementById(key));
 
-            if (localStorage && localStorage.getItem(key)) {
-                widget.updateBuilder($.parseJSON(localStorage.getItem(key)));
+            if (localStorage && localStorage.getItem(hashedUrl + key)) {
+                widget.updateBuilder($.parseJSON(localStorage.getItem(hashedUrl + key)));
             }
 
             widgets[key] = widget;
@@ -78,7 +84,7 @@ $(function(){
             var builder = $.parseJSON(event.data);
             
             if (localStorage) {
-                localStorage.setItem(builder.id, event.data);
+                localStorage.setItem(hashedUrl + builder.id, event.data);
             }
 
             if (widgets[builder.id]) {
