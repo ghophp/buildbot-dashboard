@@ -18,9 +18,20 @@ body {
 
 .widget-wrapper {
     display: table;
-    cursor: pointer;
     width: 100%;
     height: 100%;
+}
+
+.widget-wrapper .icons-wrapper {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.widget-wrapper .icons-wrapper a {
+    margin-left: 12px;
+    color: white;
+    text-decoration: none;
 }
 
 .widget {
@@ -34,6 +45,7 @@ body {
     text-align: center;
     font-weight: 400;
     word-wrap: break-word;
+    overflow: hidden;
 }
 
 .widget h2.value {
@@ -71,7 +83,7 @@ body {
     background-color: #f3bb33;
 }
 
-.widget[data-status="error"] {
+.widget[data-status="failed"] {
     background-color: #f04245;
 }
 

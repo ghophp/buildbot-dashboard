@@ -14,7 +14,13 @@ import (
 	"github.com/martini-contrib/render"
 )
 
-const BuildersCache string = "builders.json"
+const (
+	BuildersCache string = "builders.json"
+
+	buildingState   string = "building"
+	failedState     string = "failed"
+	successfulState string = "successful"
+)
 
 type (
 	BuildersHandler struct {
@@ -76,13 +82,18 @@ func GetBuilder(c *container.ContainerBag, id string, builder Builder) (Builder,
 		builder.Number = current.Number
 		builder.Slave = current.Slave
 		builder.Reason = current.Reason
+		builder.State = buildingState
 		builder.LastUpdate = strconv.Itoa(int(time.Now().Unix()))
 
 		if len(current.Times) > 0 {
 			builder.LastUpdate = strconv.FormatFloat(current.Times[0], 'f', 6, 64)
 		}
-		if len(current.Text) > 0 {
-			builder.State = current.Text[1]
+		if len(current.Text) >= 2 {
+			if current.Text[0] == failedState {
+				builder.State = failedState
+			} else if current.Text[1] == successfulState {
+				builder.State = successfulState
+			}
 		}
 
 		return builder, nil

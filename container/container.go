@@ -9,6 +9,7 @@ import (
 type ContainerBag struct {
 	BuildBotUrl string
 	GenericSize string
+	RefreshSec  int
 	Cache       *cache.Cache
 }
 
@@ -17,6 +18,7 @@ func NewContainerBag(c *config.Config) *ContainerBag {
 	return &ContainerBag{
 		BuildBotUrl: c.BuildBotUrl,
 		GenericSize: c.GenericSize,
-		Cache:       cache.NewCache(),
+		RefreshSec:  c.RefreshSec,
+		Cache:       cache.NewCache(c.CacheInvalidate),
 	}
 }

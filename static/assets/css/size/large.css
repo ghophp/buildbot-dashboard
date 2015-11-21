@@ -6,6 +6,7 @@
     margin-bottom: 12px;
     font-size: 30px;
     max-width: 276px;
+    height: 63px;
 }
 
 .widget h2.value {
@@ -25,7 +26,7 @@
 }
 
 .loading-container {
-    bottom: 60px;
+    bottom: 50px;
     left: 54%;
 }
 

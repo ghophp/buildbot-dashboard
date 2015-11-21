@@ -17,7 +17,6 @@ var BuildWidget = React.createClass({
         window.open(buildbotUrl + 'builders/' + this.props.builder.id);
     },
     updateBuilder(builder) {
-        console.log(builder);
         this.props.builder = builder;
 
         var now = moment();
@@ -32,6 +31,12 @@ var BuildWidget = React.createClass({
             last_update: now.format('MMMM Do YYYY, HH:mm:ss') 
         });
     },
+    getConfigUrl() {
+        return buildbotUrl + "builders/"+ this.props.builder.id +"/";
+    },
+    getLastBuildUrl() {
+        return this.getConfigUrl() +"builds/" + this.getLastBuildNumber();
+    },
     render: function() {
 
         var loadingEl = null;
@@ -39,9 +44,28 @@ var BuildWidget = React.createClass({
             loadingEl = React.createElement(LoadingWidget, {});
         }
 
+        var lastBuildEl = null;
+        if (this.state.last_build > 0) {
+            lastBuildEl = React.createElement(
+                "a",
+                { className: "lnr lnr-history", href: this.getLastBuildUrl(), target: "_blank" },
+                ""
+            );
+        }
+
         return React.createElement(
             "div",
-            { className: "widget new", "data-status": this.state.status, onClick: this.openDetails.bind(this) },
+            { className: "widget new", "data-status": this.state.status },
+            React.createElement(
+                "div",
+                { className: "icons-wrapper" },
+                React.createElement(
+                    "a",
+                    { className: "lnr lnr-cog", href: this.getConfigUrl(), target: "_blank" },
+                    ""
+                ),
+                lastBuildEl
+            ),
             React.createElement(
                 "h1",
                 { className: "title" },

@@ -6,27 +6,60 @@ $(function(){
         currentSizeDimension = [100, 100];
     }
 
-    $(".gridster ul").gridster({
+    var gridster = $(".gridster ul").gridster({
         widget_base_dimensions: currentSizeDimension,
         widget_margins: [10, 10],
         autogrow_cols: true,
+        serialize_params: function ($w, wgd) {
+            return {
+                id: $w.find('.widget-wrapper').attr('id'),
+                col: wgd.col,
+                row: wgd.row,
+                size_x: wgd.size_x,
+                size_y: wgd.size_y
+            };
+        },
+        draggable: {
+            stop: function() {
+                if (localStorage) {
+                    localStorage.setItem('gridster', JSON.stringify(gridster.serialize()));
+                }
+            }
+        },
         resize: {
             enabled: false
         }
-    });
+    }).data('gridster');
 
     var widgets = {};
-    var gridster = $(".gridster ul").gridster().data('gridster');
-
+    
     $.get("/builders", function(data) {
         _.each(_.keys(data), function(key, i){
             var builder = data[key]; builder.id = key;
+            var positions = null;
 
-            gridster.add_widget('<li class="new"><div id="'+key+'" class="widget-wrapper"></div></li>', 2, 2);
+            if (localStorage && localStorage.getItem('gridster')) {
+                positions = $.parseJSON(localStorage.getItem('gridster'));
+            }
+
+            var html = '<li class="new"><div id="'+key+'" class="widget-wrapper"></div></li>';
+            var current = _.find(positions, function(i) {
+                return key == i['id'];
+            });
+
+            if (current) {
+                gridster.add_widget(html, current.size_x, current.size_y, current.col, current.row);
+            } else {
+                gridster.add_widget(html, 2, 2);    
+            }
 
             var widget = ReactDOM.render(
                 React.createElement(BuildWidget, { builder: builder }),
                 document.getElementById(key));
+
+            if (localStorage && localStorage.getItem(key)) {
+                widget.updateBuilder($.parseJSON(localStorage.getItem(key)));
+            }
 
             widgets[key] = widget;
         });
@@ -42,8 +75,12 @@ $(function(){
 
         ws = new WebSocket(new_uri);
         ws.onmessage = function(e) {
-
             var builder = $.parseJSON(event.data);
+            
+            if (localStorage) {
+                localStorage.setItem(builder.id, event.data);
+            }
+
             if (widgets[builder.id]) {
                 widgets[builder.id].updateBuilder(builder);
             }
