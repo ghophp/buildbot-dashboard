@@ -41,14 +41,16 @@ func deleteClient(cc ClientConn) {
 }
 
 func broadcastMessage(messageType int, message []byte) {
+	wsMutex.RLock()
 	for client, _ := range ActiveClients {
-		if err := client.websocket.WriteMessage(messageType, message); err != nil {
-			deleteClient(client)
-		}
+		client.websocket.WriteMessage(messageType, message)
 	}
+	wsMutex.RUnlock()
 }
 
 func MonitorBuilders(c *container.ContainerBag) {
+	responses := make(chan string)
+
 	for {
 		if len(ActiveClients) > 0 {
 			builders, err := GetBuilders(c)
@@ -56,16 +58,37 @@ func MonitorBuilders(c *container.ContainerBag) {
 				return
 			}
 
+			filtered := make(map[string]Builder)
 			for id, builder := range builders {
 				if len(builder.CachedBuilds) > 0 {
+					filtered[id] = builder
+				}
+			}
+
+			var wg sync.WaitGroup
+			wg.Add(len(filtered))
+
+			for id, builder := range filtered {
+				go func(id string, builder Builder) {
+					defer wg.Done()
+
 					b, err := GetBuilder(c, id, builder)
 					if err == nil {
 						if r, err := json.Marshal(b); err == nil {
-							broadcastMessage(websocket.TextMessage, r)
+							responses <- string(r)
 						}
 					}
-				}
+
+				}(id, builder)
 			}
+
+			go func() {
+				for response := range responses {
+					broadcastMessage(websocket.TextMessage, []byte(response))
+				}
+			}()
+
+			wg.Wait()
 		}
 
 		time.Sleep(time.Second * time.Duration(c.RefreshSec))
