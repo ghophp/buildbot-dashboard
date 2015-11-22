@@ -20,52 +20,64 @@
 
   <section class="main-content">
     <h1><a id="buildbotdashing_Join_the_chat_at_httpsgitterimghophpbuildbotdashboardhttpsbadgesgitterimJoin20Chatsvghttpsgitterimghophpbuildbotdashboardutm_sourcebadgeutm_mediumbadgeutm_campaignprbadgeutm_contentbadge_0"></a>buildbot-dashing <a href="https://gitter.im/ghophp/buildbot-dashboard?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Join the chat at https://gitter.im/ghophp/buildbot-dashboard"></a></h1>
-    <p>If you have a CI/CD setup, it is really important to keep a central display and follow the builds and process going on the CI tool. This project aims to be the dashboard that will allow you to do present better results at a central display with <code>buildbot</code>.</p>
-    <h2><a id="Download_Build_Statushttpssemaphorecicomapiv1projects44130239880c468f9fa7b976a355676a611030badgesvghttpssemaphorecicomghophpbuildbotdashboard_3"></a>Download <a href="https://semaphoreci.com/ghophp/buildbot-dashboard"><img src="https://semaphoreci.com/api/v1/projects/44130239-880c-468f-9fa7-b976a355676a/611030/badge.svg" alt="Build Status"></a></h2>
-    <p>The project has some precompiled binaries, if your enviroment match one of the releases above, this is the most simple way to use this project.</p>
-    <ul>
-      <li><a href="https://github.com/ghophp/buildbot-dashboard/raw/master/bb_dash_osx.zip">OSX</a></li>
-      <li><a href="https://github.com/ghophp/buildbot-dashboard/raw/master/bb_dash_linux32.zip">Linux x32</a></li>
-      <li><a href="https://github.com/ghophp/buildbot-dashboard/raw/master/bb_dash_linux64.zip">Linux x64</a></li>
-    </ul>
-    <h2><a id="Running_10"></a>Running</h2>
-    <p><code>buildbot</code> is the only required flag, you must provide the base url of the running builbot.</p>
-    <pre><code class="language-sh">$ ./buildbot_dashboard -h
-      -buildbot string
-      buildbot url eg. http://<span class="hljs-number">10.0</span>.<span class="hljs-number">0.1</span>/
-      -empty
-      show builders with no builds (default <span class="hljs-literal">false</span>)
-      -filter string
-      regex applied over the builder name
-      -invalidate int
-      cache invalidate <span class="hljs-keyword">in</span> seconds (default and min <span class="hljs-number">5</span> minutes) (default <span class="hljs-number">10</span>)
-      -refresh int
-      refresh rate <span class="hljs-keyword">in</span> seconds (default and min <span class="hljs-number">10</span> seconds) (default <span class="hljs-number">10</span>)
-      -size string
-      generic ui size (small|large default large) (default <span class="hljs-string">"large"</span>)
-    </code></pre>
-    <h2><a id="Manual_Build_28"></a>Manual Build</h2>
-    <p>As this project is built in <code>go</code> you can build it in multiple platforms with:</p>
-    <pre><code class="language-sh">$ go get -u -v github.com/ghophp/buildbot-dashboard
-      $ <span class="hljs-built_in">cd</span> <span class="hljs-variable">$GOPATH</span>/src/github.com/ghophp/buildbot-dashboard
-      $ go install
-      $ buildbot-dashboard --buildbot=<span class="hljs-string">"http://10.0.0.1/"</span>
-    </code></pre>
-    <p>This will fetch the version directly from github and install it on <code>$GOPATH/bin</code>, if you have <code>$GOPATH/bin</code> at your <code>$PATH</code> then you can run from everywhere the command.</p>
-    <h2><a id="Features_38"></a>Features</h2>
-    <ul>
-      <li>Non-reload monitoring through <code>websockets</code></li>
-      <li>Enhanced UI with better visualization of the builders</li>
-      <li>Easy usage with single command</li>
-      <li><code>Filter</code> options allow you to just show what matters</li>
-    </ul>
-    <h2><a id="Preview_44"></a>Preview</h2>
-    <p><img src="https://github.com/ghophp/buildbot-dashboard/raw/master/preview/preview_apache.gif?raw=true" alt="Apache Board" title="Apache Board"></p>
-    <h2><a id="Todo_47"></a>Todo</h2>
-    <ul>
-      <li>Allow a totally compressed size to boards with a lot of builders</li>
-      <li>Create a fully adapted mode, that by the size of the display, and the number of the projects, keep “walking” through the multiple screens</li>
-    </ul>
+<p>If you have a CI/CD setup, it is really important to keep a central display and follow the builds and process going on the CI tool. This project aims to be the dashboard that will allow you to do present better results at a central display with <code>buildbot</code>.</p>
+<h2><a id="Download_Build_Statushttpssemaphorecicomapiv1projects44130239880c468f9fa7b976a355676a611030badgesvghttpssemaphorecicomghophpbuildbotdashboard_3"></a>Download <a href="https://semaphoreci.com/ghophp/buildbot-dashboard"><img src="https://semaphoreci.com/api/v1/projects/44130239-880c-468f-9fa7-b976a355676a/611030/badge.svg" alt="Build Status"></a></h2>
+<p>The project has some precompiled binaries, if your enviroment match one of the releases above, this is the most simple way to use this project.</p>
+<ul>
+<li><a href="https://s3-eu-west-1.amazonaws.com/buildbot-dashboard/mac/buildbot-dashing">OSX</a></li>
+<li><a href="https://s3-eu-west-1.amazonaws.com/buildbot-dashboard/linux64/buildbot-dashboard">Linux x64</a></li>
+</ul>
+<h2><a id="Running_9"></a>Running</h2>
+<p><code>buildbot</code> is the only required flag, you must provide the base url of the running builbot.</p>
+<pre><code class="language-sh">$ ./buildbot_dashboard -h
+-buildbot string
+    buildbot url eg. http://<span class="hljs-number">10.0</span>.<span class="hljs-number">0.1</span>/
+-empty
+    show builders with no builds (default <span class="hljs-literal">false</span>)
+-filter string
+    regex applied over the builder name
+-invalidate int
+    cache invalidate <span class="hljs-keyword">in</span> seconds (default and min <span class="hljs-number">5</span> minutes) (default <span class="hljs-number">10</span>)
+-refresh int
+    refresh rate <span class="hljs-keyword">in</span> seconds (default and min <span class="hljs-number">10</span> seconds) (default <span class="hljs-number">10</span>)
+-size string
+    generic ui size (small|large default large) (default <span class="hljs-string">"large"</span>)
+</code></pre>
+<h2><a id="Port_and_Logs_27"></a>Port and Logs</h2>
+<p>As this project is build over <code>martini</code> please consider setting this <code>env variables</code> when deploy:</p>
+<pre><code class="language-sh"><span class="hljs-built_in">export</span> PORT=<span class="hljs-number">3000</span>
+<span class="hljs-built_in">export</span> MARTINI_ENV=production
+</code></pre>
+<h2><a id="Manual_Build_34"></a>Manual Build</h2>
+<p>As this project is built in <code>go</code> you can build it in multiple platforms with:</p>
+<pre><code class="language-sh">$ go get -u github.com/ghophp/buildbot-dashboard
+$ <span class="hljs-built_in">cd</span> <span class="hljs-variable">$GOPATH</span>/src/github.com/ghophp/buildbot-dashboard
+$ ./install.sh
+</code></pre>
+<p>This will fetch the code and generate the assets as binary, then you can <code>go install</code> or <code>go build</code>, and then run:</p>
+<pre><code class="language-sh">$ buildbot-dashboard --buildbot=<span class="hljs-string">"http://10.0.0.1/"</span>
+</code></pre>
+<p>If you have <code>$GOPATH/bin</code> at your <code>$PATH</code> then you can run from everywhere the command.</p>
+<p>You can also run with the <code>go run</code> with:</p>
+<pre><code class="language-sh">$ go run *.go -builbot=<span class="hljs-string">"http://10.0.0.1/"</span>
+</code></pre>
+<h2><a id="Features_52"></a>Features</h2>
+<ul>
+<li>Non-reload monitoring through <code>websockets</code></li>
+<li>Enhanced UI with better visualization of the builders</li>
+<li>Easy usage with single command (<code>binary assets</code>)</li>
+<li><code>Filter</code> options allow you to just show what matters</li>
+<li><code>Base64</code> communication with websockets (light)</li>
+<li>Save arrangement of the dashboard</li>
+</ul>
+<h2><a id="Preview_60"></a>Preview</h2>
+<p><img src="https://github.com/ghophp/buildbot-dashboard/raw/master/preview/preview_apache.gif?raw=true" alt="Apache Board" title="Apache Board"></p>
+<p><img src="https://github.com/ghophp/buildbot-dashboard/raw/master/preview/preview_apache_small.gif?raw=true" alt="Apache Board Small" title="Apache Board Small"></p>
+<h2><a id="Todo_65"></a>Todo</h2>
+<ul>
+<li>Allow a totally compressed size to boards with a lot of builders</li>
+<li>Create a fully adapted mode, that by the size of the display, and the number of the projects, keep “walking” through the multiple screens</li>
+</ul>
 
     <footer class="site-footer">
       <span class="site-footer-owner"><a href="https://github.com/ghophp/buildbot-dashboard">buildbot-dashboard</a> is maintained by <a href="https://github.com/ghophp">ghophp</a>.</span>
