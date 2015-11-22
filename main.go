@@ -6,8 +6,10 @@ import (
 	"github.com/ghophp/buildbot-dashing/config"
 	"github.com/ghophp/buildbot-dashing/container"
 	"github.com/ghophp/buildbot-dashing/handler"
+
+	"github.com/ghophp/render"
 	"github.com/go-martini/martini"
-	"github.com/martini-contrib/render"
+	"github.com/martini-contrib/staticbin"
 )
 
 func NewRouter(c *container.ContainerBag) *martini.ClassicMartini {
@@ -17,8 +19,8 @@ func NewRouter(c *container.ContainerBag) *martini.ClassicMartini {
 	)
 
 	router := martini.Classic()
-	router.Use(martini.Static("static/assets"))
-	router.Use(render.Renderer(render.Options{
+	router.Use(staticbin.Static("static/assets", Asset))
+	router.Use(render.RendererBin(Asset, AssetNames(), render.Options{
 		Directory:  "static/templates",
 		Layout:     "layout",
 		Extensions: []string{".tmpl", ".html"},

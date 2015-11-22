@@ -11,7 +11,7 @@ import (
 	"io/ioutil"
 
 	"github.com/ghophp/buildbot-dashing/container"
-	"github.com/martini-contrib/render"
+	"github.com/ghophp/render"
 )
 
 const (
