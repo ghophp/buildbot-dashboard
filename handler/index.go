@@ -2,7 +2,7 @@ package handler
 
 import (
 	"github.com/ghophp/buildbot-dashing/container"
-	"github.com/martini-contrib/render"
+	"github.com/ghophp/render"
 )
 
 type IndexHandler struct {

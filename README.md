@@ -29,18 +29,28 @@ $ ./buildbot_dashboard -h
 ## Manual Build
 As this project is built in `go` you can build it in multiple platforms with:
 ```sh
-$ go get -u -v github.com/ghophp/buildbot-dashboard
+$ go get -u github.com/ghophp/buildbot-dashboard
 $ cd $GOPATH/src/github.com/ghophp/buildbot-dashboard
-$ go install
+$ ./install.sh
+```
+This will fetch the code and generate the assets as binary, then you can `go install` or `go build`, and then run:
+```sh
 $ buildbot-dashboard --buildbot="http://10.0.0.1/"
 ```
-This will fetch the version directly from github and install it on `$GOPATH/bin`, if you have `$GOPATH/bin` at your `$PATH` then you can run from everywhere the command.
+If you have `$GOPATH/bin` at your `$PATH` then you can run from everywhere the command.
+
+You can also run with the `go run` with:
+```sh
+$ go run *.go -builbot="http://10.0.0.1/"
+```
 
 ## Features
 - Non-reload monitoring through `websockets`
 - Enhanced UI with better visualization of the builders
-- Easy usage with single command
+- Easy usage with single command (`binary assets`)
 - `Filter` options allow you to just show what matters
+- `Base64` communication with websockets (light)
+- Save arrangement of the dashboard
 
 ## Preview
 ![Apache Board](/preview/preview_apache.gif?raw=true "Apache Board")

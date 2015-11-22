@@ -3,11 +3,13 @@ package handler
 import (
 	"encoding/base64"
 	"encoding/json"
-	"github.com/beatrichartz/martini-sockets"
-	"github.com/ghophp/buildbot-dashing/container"
-	"github.com/go-martini/martini"
 	"sync"
 	"time"
+
+	"github.com/ghophp/buildbot-dashing/container"
+
+	"github.com/beatrichartz/martini-sockets"
+	"github.com/go-martini/martini"
 )
 
 type (
