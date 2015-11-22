@@ -4,9 +4,8 @@ If you have a CI/CD setup, it is really important to keep a central display and 
 ## Download [![Build Status](https://semaphoreci.com/api/v1/projects/44130239-880c-468f-9fa7-b976a355676a/611030/badge.svg)](https://semaphoreci.com/ghophp/buildbot-dashboard)
 The project has some precompiled binaries, if your enviroment match one of the releases above, this is the most simple way to use this project.
 
-- [OSX](https://github.com/ghophp/buildbot-dashboard/raw/master/bb_dash_osx.zip)
-- [Linux x32](https://github.com/ghophp/buildbot-dashboard/raw/master/bb_dash_linux32.zip)
-- [Linux x64](https://github.com/ghophp/buildbot-dashboard/raw/master/bb_dash_linux64.zip)
+- [OSX](https://s3-eu-west-1.amazonaws.com/buildbot-dashboard/mac/buildbot-dashing)
+- [Linux x64](https://s3-eu-west-1.amazonaws.com/buildbot-dashboard/linux64/buildbot-dashboard)
 
 ## Running
 `buildbot` is the only required flag, you must provide the base url of the running builbot.
@@ -24,6 +23,13 @@ $ ./buildbot_dashboard -h
 	refresh rate in seconds (default and min 10 seconds) (default 10)
 -size string
 	generic ui size (small|large default large) (default "large")
+```
+
+## Port and Logs
+As this project is build over `martini` please consider setting this `env variables` when deploy:
+```sh
+export PORT=3000
+export MARTINI_ENV=production
 ```
 
 ## Manual Build
@@ -54,6 +60,8 @@ $ go run *.go -builbot="http://10.0.0.1/"
 
 ## Preview
 ![Apache Board](/preview/preview_apache.gif?raw=true "Apache Board")
+
+![Apache Board Small](/preview/preview_apache_small.gif?raw=true "Apache Board Small")
 
 ## Todo
 - Allow a totally compressed size to boards with a lot of builders

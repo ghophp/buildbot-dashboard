@@ -1,6 +1,9 @@
 package config
 
-import "flag"
+import (
+	"flag"
+	"fmt"
+)
 
 const (
 	genericSize     string = "large"
@@ -17,7 +20,7 @@ type Config struct {
 	EmptyBuilders   bool
 }
 
-func NewConfig() *Config {
+func NewConfig() (*Config, error) {
 	buildbot := flag.String("buildbot", "", "buildbot url eg. http://10.0.0.1/")
 	size := flag.String("size", genericSize, "generic ui size (small|large default large)")
 	refresh := flag.Int("refresh", minRefreshRate, "refresh rate in seconds (default and min 10 seconds)")
@@ -37,7 +40,7 @@ func NewConfig() *Config {
 	}
 
 	if len(cfg.BuildBotUrl) <= 0 {
-		panic("buildbot url cannot be empty")
+		return nil, fmt.Errorf("NewConfig %s", "no buildbot url informed")
 	}
 
 	if cfg.BuildBotUrl[len(cfg.BuildBotUrl)-1:] != "/" {
@@ -53,5 +56,5 @@ func NewConfig() *Config {
 		cfg.CacheInvalidate = cacheInvalidate
 	}
 
-	return cfg
+	return cfg, nil
 }

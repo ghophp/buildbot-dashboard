@@ -53,5 +53,10 @@ func NewRouter(c *container.ContainerBag) *martini.ClassicMartini {
 }
 
 func main() {
-	NewRouter(container.NewContainerBag(config.NewConfig())).Run()
+	cfg, err := config.NewConfig()
+	if err != nil {
+		panic(err)
+	}
+
+	NewRouter(container.NewContainerBag(cfg)).Run()
 }

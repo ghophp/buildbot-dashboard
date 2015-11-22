@@ -27,7 +27,9 @@ func NewContainerBag(c *config.Config) *ContainerBag {
 
 	var filter *regexp.Regexp = nil
 	if len(c.Filter) > 0 {
-		filter = regexp.MustCompile(c.Filter)
+		if r, err := regexp.Compile(c.Filter); err == nil {
+			filter = r
+		}
 	}
 
 	return &ContainerBag{
