@@ -1,58 +1,71 @@
 package handler
 
 import (
+	"encoding/base64"
 	"encoding/json"
-	"log"
-	"net"
-	"net/http"
+	"github.com/beatrichartz/martini-sockets"
+	"github.com/ghophp/buildbot-dashing/container"
+	"github.com/go-martini/martini"
 	"sync"
 	"time"
-
-	"github.com/ghophp/buildbot-dashing/container"
-	"github.com/gorilla/websocket"
 )
 
 type (
-	WsHandler struct {
-		c *container.ContainerBag
+	ClientList struct {
+		sync.Mutex
+		clients []*Client
 	}
 
-	ClientConn struct {
-		websocket *websocket.Conn
-		clientIP  net.Addr
+	Client struct {
+		in         <-chan *Message
+		out        chan<- *Message
+		done       <-chan bool
+		err        <-chan error
+		disconnect chan<- int
+	}
+
+	Message struct {
+		Text string `json:"text"`
 	}
 )
 
-var (
-	ActiveClients = make(map[ClientConn]int)
-	wsMutex       sync.RWMutex
-)
+// clientList hold the connection with the websockets
+var clientList *ClientList
 
-func addClient(cc ClientConn) {
-	wsMutex.Lock()
-	ActiveClients[cc] = 0
-	wsMutex.Unlock()
+func newClientList() *ClientList {
+	return &ClientList{sync.Mutex{}, make([]*Client, 0)}
 }
 
-func deleteClient(cc ClientConn) {
-	wsMutex.Lock()
-	delete(ActiveClients, cc)
-	wsMutex.Unlock()
+func (r *ClientList) appendClient(client *Client) {
+	r.Lock()
+	r.clients = append(r.clients, client)
+	r.Unlock()
 }
 
-func broadcastMessage(messageType int, message []byte) {
-	wsMutex.RLock()
-	for client, _ := range ActiveClients {
-		client.websocket.WriteMessage(messageType, message)
+func (r *ClientList) removeClient(client *Client) {
+	r.Lock()
+	defer r.Unlock()
+
+	for index, c := range r.clients {
+		if c == client {
+			r.clients = append(r.clients[:index], r.clients[(index+1):]...)
+		}
 	}
-	wsMutex.RUnlock()
 }
 
-func MonitorBuilders(c *container.ContainerBag) {
+func (r *ClientList) broadcast(msg *Message) {
+	r.Lock()
+	for _, c := range r.clients {
+		c.out <- msg
+	}
+	defer r.Unlock()
+}
+
+func monitorBuilders(c *container.ContainerBag) {
 	responses := make(chan string)
 
 	for {
-		if len(ActiveClients) > 0 {
+		if len(clientList.clients) > 0 {
 			builders, err := GetBuilders(c)
 			if err != nil || len(builders) <= 0 {
 				return
@@ -75,7 +88,7 @@ func MonitorBuilders(c *container.ContainerBag) {
 					b, err := GetBuilder(c, id, builder)
 					if err == nil {
 						if r, err := json.Marshal(b); err == nil {
-							responses <- string(r)
+							responses <- base64.StdEncoding.EncodeToString(r)
 						}
 					}
 
@@ -84,7 +97,7 @@ func MonitorBuilders(c *container.ContainerBag) {
 
 			go func() {
 				for response := range responses {
-					broadcastMessage(websocket.TextMessage, []byte(response))
+					clientList.broadcast(&Message{response})
 				}
 			}()
 
@@ -95,24 +108,28 @@ func MonitorBuilders(c *container.ContainerBag) {
 	}
 }
 
-func NewWsHandler(c *container.ContainerBag) *WsHandler {
-	go MonitorBuilders(c)
+func AddWs(m *martini.ClassicMartini, c *container.ContainerBag) {
+	clientList = newClientList()
 
-	return &WsHandler{
-		c: c,
-	}
-}
+	go monitorBuilders(c)
 
-func (h WsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	ws, err := websocket.Upgrade(w, r, nil, 1024, 1024)
-	if _, ok := err.(websocket.HandshakeError); ok {
-		http.Error(w, "Not a websocket handshake", 400)
-		return
-	} else if err != nil {
-		log.Println(err)
-		return
-	}
+	m.Get("/ws", sockets.JSON(Message{}),
+		func(params martini.Params,
+			receiver <-chan *Message,
+			sender chan<- *Message,
+			done <-chan bool,
+			disconnect chan<- int,
+			err <-chan error) (int, string) {
 
-	sockCli := ClientConn{ws, ws.RemoteAddr()}
-	addClient(sockCli)
+			client := &Client{receiver, sender, done, err, disconnect}
+			clientList.appendClient(client)
+
+			for {
+				select {
+				case <-client.done:
+					clientList.removeClient(client)
+					return 200, "OK"
+				}
+			}
+		})
 }

@@ -14,7 +14,6 @@ func NewRouter(c *container.ContainerBag) *martini.ClassicMartini {
 	var (
 		indexHandler    = handler.NewIndexHandler(c)
 		buildersHandler = handler.NewBuildersHandler(c)
-		wsHandler       = handler.NewWsHandler(c)
 	)
 
 	router := martini.Classic()
@@ -44,8 +43,9 @@ func NewRouter(c *container.ContainerBag) *martini.ClassicMartini {
 	}))
 
 	router.Get("/", indexHandler.ServeHTTP)
-	router.Get("/ws", wsHandler.ServeHTTP)
 	router.Get("/builders", buildersHandler.ServeHTTP)
+
+	handler.AddWs(router, c)
 
 	return router
 }

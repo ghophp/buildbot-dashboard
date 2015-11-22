@@ -81,14 +81,25 @@ $(function(){
 
         ws = new WebSocket(new_uri);
         ws.onmessage = function(e) {
-            var builder = $.parseJSON(event.data);
-            
-            if (localStorage) {
-                localStorage.setItem(hashedUrl + builder.id, event.data);
+            var message = $.parseJSON(event.data);
+            var decoded = null;
+            var builder = null;
+
+            if (message.text) {
+                decoded = Base64.decode(message.text);
+                if (decoded) {
+                    builder = $.parseJSON(decoded);
+                }
             }
 
-            if (widgets[builder.id]) {
-                widgets[builder.id].updateBuilder(builder);
+            if (builder) {
+                if (localStorage) {
+                    localStorage.setItem(hashedUrl + builder.id, decoded);
+                }
+
+                if (widgets[builder.id]) {
+                    widgets[builder.id].updateBuilder(builder);
+                }
             }
         };
     });
