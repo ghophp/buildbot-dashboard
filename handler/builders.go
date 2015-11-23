@@ -3,7 +3,6 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
-	"net"
 	"net/http"
 	"strconv"
 	"time"
@@ -27,14 +26,13 @@ type (
 	}
 
 	Builder struct {
-		Id           string   `json:"id"`
-		CachedBuilds []int    `json:"cachedBuilds"`
-		State        string   `json:"state"`
-		Reason       string   `json:"reason"`
-		Blame        []string `json:"blame"`
-		Number       int      `json:"number"`
-		Slave        string   `json:"slave"`
-		LastUpdate   string   `json:"last_update"`
+		Id         string   `json:"id"`
+		State      string   `json:"state"`
+		Reason     string   `json:"reason"`
+		Blame      []string `json:"blame"`
+		Number     int      `json:"number"`
+		Slave      string   `json:"slave"`
+		LastUpdate string   `json:"last_update"`
 	}
 
 	DetailedBuilder struct {
@@ -44,6 +42,7 @@ type (
 		Slave  string    `json:"slave"`
 		Times  []float64 `json:"times"`
 		Text   []string  `json:"text"`
+		Error  string    `json:"error"`
 	}
 )
 
@@ -68,7 +67,7 @@ func GetBuilder(c *container.ContainerBag, id string, builder Builder) (Builder,
 		return builder, err
 	}
 
-	if current, ok := b["-1"]; ok {
+	if current, ok := b["-1"]; ok && current.Error == "" {
 
 		builder.Id = id
 		builder.Blame = current.Blame

@@ -10,8 +10,7 @@ var BuildWidget = React.createClass({
         };
     },
     getLastBuildNumber() {
-        var c = this.props.builder.cachedBuilds;
-        return c && c.length ? c[c.length - 1] : 0;
+        return this.props.builder.number;
     },
     openDetails() {
         window.open(buildbotUrl + 'builders/' + this.props.builder.id);
@@ -55,7 +54,11 @@ var BuildWidget = React.createClass({
 
         return React.createElement(
             "div",
-            { className: "widget new", "data-status": this.state.status },
+            { 
+                className: "widget new", 
+                "data-status": this.state.status, 
+                "data-empty": this.state.last_build > 0 ? '' : 'empty' 
+            },
             React.createElement(
                 "div",
                 { className: "icons-wrapper" },
@@ -79,7 +82,7 @@ var BuildWidget = React.createClass({
             React.createElement(
                 "p",
                 { className: "more-info" },
-                "cached builds"
+                "last build"
             ),
             React.createElement(
                 "p",

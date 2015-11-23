@@ -38,10 +38,6 @@ $(function(){
     $.get("/builders", function(data) {
         _.each(_.keys(data), function(key, i){
             var builder = data[key]; builder.id = key;
-            if (!displayEmptyBuilder && (!builder.cachedBuilds || builder.cachedBuilds.length <= 0)) {
-                return;
-            }
-
             var positions = null;
 
             if (localStorage && localStorage.getItem(GRIDSTER_HASHED_KEY)) {

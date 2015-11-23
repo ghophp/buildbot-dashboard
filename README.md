@@ -14,8 +14,6 @@ The project has some precompiled binaries, if your enviroment match one of the r
 $ ./buildbot_dashboard -h
 -buildbot string
 	buildbot url eg. http://10.0.0.1/
--empty
-	show builders with no builds (default false)
 -filter string
 	regex applied over the builder name
 -invalidate int

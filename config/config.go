@@ -17,7 +17,6 @@ type Config struct {
 	Filter          string
 	RefreshSec      int
 	CacheInvalidate int
-	EmptyBuilders   bool
 }
 
 func NewConfig() (*Config, error) {
@@ -25,7 +24,6 @@ func NewConfig() (*Config, error) {
 	size := flag.String("size", genericSize, "generic ui size (small|large default large)")
 	refresh := flag.Int("refresh", minRefreshRate, "refresh rate in seconds (default and min 10 seconds)")
 	cache := flag.Int("invalidate", cacheInvalidate, "cache invalidate in seconds (default and min 5 minutes)")
-	empty := flag.Bool("empty", false, "show builders with no builds (default false)")
 	filter := flag.String("filter", "", "regex applied over the builder name")
 
 	flag.Parse()
@@ -35,7 +33,6 @@ func NewConfig() (*Config, error) {
 		GenericSize:     *size,
 		RefreshSec:      *refresh,
 		CacheInvalidate: *cache,
-		EmptyBuilders:   *empty,
 		Filter:          *filter,
 	}
 

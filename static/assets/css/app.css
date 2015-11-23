@@ -87,6 +87,14 @@ body {
     background-color: #f04245;
 }
 
+.widget[data-empty="empty"] {
+    background-color: #565656;
+}
+
+.widget[data-empty="empty"] p.updated-at {
+    color: rgba(255, 255, 255, 0.8);
+}
+
 /** ---- Loading Bar ---- */
 
 .loading-container {

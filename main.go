@@ -37,9 +37,6 @@ func NewRouter(c *container.ContainerBag) *martini.ClassicMartini {
 				"hashedUrl": func() string {
 					return c.HashedUrl
 				},
-				"displayEmptyBuilder": func() bool {
-					return c.EmptyBuilders
-				},
 			},
 		},
 	}))

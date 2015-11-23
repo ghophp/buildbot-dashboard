@@ -73,17 +73,10 @@ func monitorBuilders(c *container.ContainerBag) {
 				return
 			}
 
-			filtered := make(map[string]Builder)
-			for id, builder := range builders {
-				if len(builder.CachedBuilds) > 0 {
-					filtered[id] = builder
-				}
-			}
-
 			var wg sync.WaitGroup
-			wg.Add(len(filtered))
+			wg.Add(len(builders))
 
-			for id, builder := range filtered {
+			for id, builder := range builders {
 				go func(id string, builder Builder) {
 					defer wg.Done()
 
