@@ -7,7 +7,6 @@ all: build test
 
 deps:
 	${GO} get -u github.com/motain/gocheck
-	${GO} get -u github.com/ghophp/buildbot-dashboard
 	${GO} get -u github.com/ghophp/render
 	${GO} get -u github.com/go-martini/martini
 	${GO} get -u github.com/martini-contrib/staticbin
