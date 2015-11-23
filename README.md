@@ -8,6 +8,8 @@ The project has some precompiled binaries, if your enviroment match one of the r
 - [Linux x64](https://s3-eu-west-1.amazonaws.com/buildbot-dashboard/linux64/buildbot-dashboard)
 - [OSX](https://s3-eu-west-1.amazonaws.com/buildbot-dashboard/mac/buildbot-dashboard)
 
+How to use with [runit](https://github.com/ghophp/buildbot-dashboard/wiki/runit).
+
 ## Running
 `buildbot` is the only required flag, you must provide the base url of the running builbot.
 ```sh
@@ -65,3 +67,4 @@ $ go run *.go -builbot="http://10.0.0.1/"
 ## Todo
 - Allow a totally compressed size to boards with a lot of builders
 - Create a fully adapted mode, that by the size of the display, and the number of the projects, keep "walking" through the multiple screens
+- Use violetear
