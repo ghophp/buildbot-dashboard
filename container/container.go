@@ -5,8 +5,8 @@ import (
 	"encoding/hex"
 	"regexp"
 
-	"github.com/ghophp/buildbot-dashing/cache"
-	"github.com/ghophp/buildbot-dashing/config"
+	"github.com/ghophp/buildbot-dashboard/cache"
+	"github.com/ghophp/buildbot-dashboard/config"
 )
 
 // ContainerBag carries all the instantiated dependencies necessary to the handlers work

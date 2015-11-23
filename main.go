@@ -3,9 +3,9 @@ package main
 import (
 	"html/template"
 
-	"github.com/ghophp/buildbot-dashing/config"
-	"github.com/ghophp/buildbot-dashing/container"
-	"github.com/ghophp/buildbot-dashing/handler"
+	"github.com/ghophp/buildbot-dashboard/config"
+	"github.com/ghophp/buildbot-dashboard/container"
+	"github.com/ghophp/buildbot-dashboard/handler"
 
 	"github.com/ghophp/render"
 	"github.com/go-martini/martini"

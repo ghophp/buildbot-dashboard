@@ -1,10 +1,10 @@
-# buildbot-dashing [![Join the chat at https://gitter.im/ghophp/buildbot-dashboard](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ghophp/buildbot-dashboard?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# buildbot-dashboard [![Join the chat at https://gitter.im/ghophp/buildbot-dashboard](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ghophp/buildbot-dashboard?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 If you have a CI/CD setup, it is really important to keep a central display and follow the builds and process going on the CI tool. This project aims to be the dashboard that will allow you to do present better results at a central display with `buildbot`.
 
 ## Download [![Build Status](https://semaphoreci.com/api/v1/projects/44130239-880c-468f-9fa7-b976a355676a/611030/badge.svg)](https://semaphoreci.com/ghophp/buildbot-dashboard)
 The project has some precompiled binaries, if your enviroment match one of the releases above, this is the most simple way to use this project.
 
-- [OSX](https://s3-eu-west-1.amazonaws.com/buildbot-dashboard/mac/buildbot-dashing)
+- [OSX](https://s3-eu-west-1.amazonaws.com/buildbot-dashboard/mac/buildbot-dashboard)
 - [Linux x64](https://s3-eu-west-1.amazonaws.com/buildbot-dashboard/linux64/buildbot-dashboard)
 
 ## Running

@@ -10,7 +10,7 @@ import (
 
 	"io/ioutil"
 
-	"github.com/ghophp/buildbot-dashing/container"
+	"github.com/ghophp/buildbot-dashboard/container"
 	"github.com/ghophp/render"
 )
 
