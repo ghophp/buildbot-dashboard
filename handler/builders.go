@@ -53,12 +53,6 @@ func NewBuildersHandler(c *container.ContainerBag) *BuildersHandler {
 	}
 }
 
-var timeout = time.Duration(2 * time.Second)
-
-func dialTimeout(network, addr string) (net.Conn, error) {
-	return net.DialTimeout(network, addr, timeout)
-}
-
 func GetBuilder(c *container.ContainerBag, id string, builder Builder) (Builder, error) {
 	var b map[string]DetailedBuilder
 
@@ -130,15 +124,9 @@ func GetBuilders(c *container.ContainerBag) (map[string]Builder, error) {
 	}
 
 	if c.FilterRegex != nil {
-		var del []string
 		for key, _ := range data {
 			if !c.FilterRegex.MatchString(key) {
-				del = append(del, key)
-			}
-		}
-		if len(del) > 0 {
-			for _, k := range del {
-				delete(data, k)
+				delete(data, key)
 			}
 		}
 	}
