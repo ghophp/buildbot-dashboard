@@ -11,7 +11,7 @@ deps:
 	${GO} get -u github.com/go-martini/martini
 	${GO} get -u github.com/martini-contrib/staticbin
 	${GO} get -u github.com/beatrichartz/martini-sockets
-	${GO} get -u github.com/jteeuwen/go-bindata
+	${GO} get -u github.com/jteeuwen/go-bindata/...
 
 build: deps
 build:
