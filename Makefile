@@ -18,7 +18,7 @@ build:
 	${GOPATH}/bin/go-bindata static/...
 	${GO} build -o ${BIN_NAME}
 
-test: deps
+test:
 	${GO} test -v github.com/ghophp/buildbot-dashboard/cache
 	${GO} test -v github.com/ghophp/buildbot-dashboard/config
 	${GO} test -v github.com/ghophp/buildbot-dashboard/container

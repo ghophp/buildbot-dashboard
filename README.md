@@ -4,8 +4,9 @@ If you have a CI/CD setup, it is really important to keep a central display and 
 ## Download [![Build Status](https://semaphoreci.com/api/v1/projects/44130239-880c-468f-9fa7-b976a355676a/611030/badge.svg)](https://semaphoreci.com/ghophp/buildbot-dashboard)
 The project has some precompiled binaries, if your enviroment match one of the releases above, this is the most simple way to use this project.
 
-- [OSX](https://s3-eu-west-1.amazonaws.com/buildbot-dashboard/mac/buildbot-dashboard)
+- [FreeBSD](https://s3-eu-west-1.amazonaws.com/buildbot-dashboard/freebsd/buildbot-dashboard)
 - [Linux x64](https://s3-eu-west-1.amazonaws.com/buildbot-dashboard/linux64/buildbot-dashboard)
+- [OSX](https://s3-eu-west-1.amazonaws.com/buildbot-dashboard/mac/buildbot-dashboard)
 
 ## Running
 `buildbot` is the only required flag, you must provide the base url of the running builbot.
