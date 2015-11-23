@@ -1,17 +1,29 @@
-.PHONY: all get test build
+.PHONY: all deps test clean build
 
 GO ?= go
-WILDCARD ?= ...
+BIN_NAME=buildbot-dashboard
 
-all: get build test
+all: build test
 
-get:
-	${GO} get ./${WILDCARD}
-	${GO} get -u github.com/jteeuwen/go-bindata/${WILDCARD}
-	${GOPATH}/bin/go-bindata static/${WILDCARD}
+deps:
+	${GO} get -u github.com/motain/gocheck
+	${GO} get -u github.com/ghophp/buildbot-dashboard
+	${GO} get -u github.com/ghophp/render
+	${GO} get -u github.com/go-martini/martini
+	${GO} get -u github.com/martini-contrib/staticbin
+	${GO} get -u github.com/beatrichartz/martini-sockets
+	${GO} get -u github.com/jteeuwen/go-bindata
 
+build: deps
 build:
-	${GO} build
+	${GOPATH}/bin/go-bindata static/...
+	${GO} build -o ${BIN_NAME}
 
-test: get
-	${GO} test ./${WILDCARD}
+test: deps
+	${GO} test -v github.com/ghophp/buildbot-dashboard/cache
+	${GO} test -v github.com/ghophp/buildbot-dashboard/config
+	${GO} test -v github.com/ghophp/buildbot-dashboard/container
+	${GO} test -v github.com/ghophp/buildbot-dashboard/handler
+
+clean:
+	rm ${BIN_NAME}
