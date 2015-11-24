@@ -75,7 +75,7 @@ $(function(){
         new_uri += "//" + loc.host;
         new_uri += loc.pathname + "ws";
 
-        ws = new WebSocket(new_uri);
+        ws = new ReconnectingWebSocket(new_uri);
         ws.onmessage = function(e) {
             var message = $.parseJSON(event.data);
             var decoded = null;
