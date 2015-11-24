@@ -3,11 +3,8 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"strconv"
 	"time"
-
-	"io/ioutil"
 
 	"github.com/ghophp/buildbot-dashboard/container"
 	"github.com/ghophp/render"
@@ -55,15 +52,12 @@ func NewBuildersHandler(c *container.ContainerBag) *BuildersHandler {
 func GetBuilder(c *container.ContainerBag, id string, builder Builder) (Builder, error) {
 	var b map[string]DetailedBuilder
 
-	req, err := http.Get(c.BuildBotUrl + "json/builders/" + id + "/builds?select=-1&select=-1&as_text=1")
+	data, err := c.Buildbot.FetchBuilder(id)
 	if err != nil {
 		return builder, err
 	}
 
-	defer req.Body.Close()
-
-	decoder := json.NewDecoder(req.Body)
-	if err := decoder.Decode(&b); err != nil {
+	if err := json.Unmarshal(data, &b); err != nil {
 		return builder, err
 	}
 
@@ -101,14 +95,7 @@ func GetBuilders(c *container.ContainerBag) (map[string]Builder, error) {
 
 	dataBytes, err := c.Cache.GetCache(c.HashedUrl)
 	if err != nil {
-		req, err := http.Get(c.BuildBotUrl + "json/builders/?as_text=1")
-		if err != nil {
-			return nil, err
-		}
-
-		defer req.Body.Close()
-
-		dataBytes, err = ioutil.ReadAll(req.Body)
+		dataBytes, err = c.Buildbot.FetchBuilders()
 		if err != nil {
 			return nil, err
 		}
@@ -118,7 +105,7 @@ func GetBuilders(c *container.ContainerBag) (map[string]Builder, error) {
 		}
 	}
 
-	if err = json.Unmarshal(dataBytes, &data); err != nil {
+	if err := json.Unmarshal(dataBytes, &data); err != nil {
 		return nil, err
 	}
 

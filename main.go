@@ -32,7 +32,7 @@ func NewRouter(c *container.ContainerBag) *martini.ClassicMartini {
 					return c.GenericSize
 				},
 				"buildbotUrl": func() string {
-					return c.BuildBotUrl
+					return c.Buildbot.GetUrl()
 				},
 				"hashedUrl": func() string {
 					return c.HashedUrl
@@ -50,7 +50,7 @@ func NewRouter(c *container.ContainerBag) *martini.ClassicMartini {
 }
 
 func main() {
-	cfg, err := config.NewConfig()
+	cfg, err := config.NewConfig(&config.FlagLoader{})
 	if err != nil {
 		panic(err)
 	}

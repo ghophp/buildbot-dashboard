@@ -8,7 +8,7 @@ import (
 const (
 	genericSize     string = "large"
 	minRefreshRate  int    = 10
-	cacheInvalidate int    = 10
+	cacheInvalidate int    = 5
 )
 
 type Config struct {
@@ -19,22 +19,26 @@ type Config struct {
 	CacheInvalidate int
 }
 
-func NewConfig() (*Config, error) {
-	buildbot := flag.String("buildbot", "", "buildbot url eg. http://10.0.0.1/")
-	size := flag.String("size", genericSize, "generic ui size (small|large default large)")
-	refresh := flag.Int("refresh", minRefreshRate, "refresh rate in seconds (default and min 10 seconds)")
-	cache := flag.Int("invalidate", cacheInvalidate, "cache invalidate in seconds (default and min 5 minutes)")
-	filter := flag.String("filter", "", "regex applied over the builder name")
+type ConfigLoader interface {
+	Load(cfg *Config)
+}
+
+type FlagLoader struct{}
+
+func (f *FlagLoader) Load(cfg *Config) {
+	flag.StringVar(&cfg.BuildBotUrl, "buildbot", "", "buildbot url eg. http://10.0.0.1/")
+	flag.StringVar(&cfg.GenericSize, "size", genericSize, "generic ui size (small|large default large)")
+	flag.IntVar(&cfg.RefreshSec, "refresh", minRefreshRate, "refresh rate in seconds (default and min 10 seconds)")
+	flag.IntVar(&cfg.CacheInvalidate, "invalidate", cacheInvalidate, "cache invalidate in seconds (default and min 5 minutes)")
+	flag.StringVar(&cfg.Filter, "filter", "", "regex applied over the builder name")
 
 	flag.Parse()
+}
 
-	cfg := &Config{
-		BuildBotUrl:     *buildbot,
-		GenericSize:     *size,
-		RefreshSec:      *refresh,
-		CacheInvalidate: *cache,
-		Filter:          *filter,
-	}
+func NewConfig(loader ConfigLoader) (*Config, error) {
+	cfg := &Config{}
+
+	loader.Load(cfg)
 
 	if len(cfg.BuildBotUrl) <= 0 {
 		return nil, fmt.Errorf("NewConfig %s", "no buildbot url informed")

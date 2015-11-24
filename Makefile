@@ -6,6 +6,7 @@ BIN_NAME=buildbot-dashboard
 all: build test
 
 deps:
+	${GO} get -u github.com/ghophp/buildbot-dashboard
 	${GO} get -u github.com/motain/gocheck
 	${GO} get -u github.com/ghophp/render
 	${GO} get -u github.com/go-martini/martini
@@ -18,7 +19,7 @@ build:
 	${GOPATH}/bin/go-bindata static/...
 	${GO} build -o ${BIN_NAME}
 
-test:
+test: deps
 	${GO} test -v github.com/ghophp/buildbot-dashboard/cache
 	${GO} test -v github.com/ghophp/buildbot-dashboard/config
 	${GO} test -v github.com/ghophp/buildbot-dashboard/container
