@@ -1,29 +1,36 @@
-.PHONY: all deps test clean build
+.PHONY: all deps special-deps test semaphore-test clean build semaphore-build
 
 GO ?= go
 BIN_NAME=buildbot-dashboard
 
 all: build test
 
-deps:
-	${GO} get -u github.com/ghophp/buildbot-dashboard
-	${GO} get -u github.com/motain/gocheck
-	${GO} get -u github.com/ghophp/render
-	${GO} get -u github.com/go-martini/martini
-	${GO} get -u github.com/martini-contrib/staticbin
-	${GO} get -u github.com/beatrichartz/martini-sockets
-	${GO} get -u github.com/jteeuwen/go-bindata/...
+special-deps:
+	${GO} get github.com/ghophp/buildbot-dashboard
 
-build: deps
-build:
+deps:
+	${GO} get gopkg.in/check.v1
+	${GO} get github.com/ghophp/render
+	${GO} get github.com/go-martini/martini
+	${GO} get github.com/martini-contrib/staticbin
+	${GO} get github.com/beatrichartz/martini-sockets
+	${GO} get github.com/jteeuwen/go-bindata/...
 	${GOPATH}/bin/go-bindata static/...
+
+semaphore-build: deps
+semaphore-build:
 	${GO} build -o ${BIN_NAME}
 
-test: deps
-	${GO} test -v github.com/ghophp/buildbot-dashboard/cache
-	${GO} test -v github.com/ghophp/buildbot-dashboard/config
-	${GO} test -v github.com/ghophp/buildbot-dashboard/container
-	${GO} test -v github.com/ghophp/buildbot-dashboard/handler
+semaphore-test: deps
+semaphore-test: deps
+	${GO} test github.com/ghophp/buildbot-dashboard/cache
+	${GO} test github.com/ghophp/buildbot-dashboard/config
+	${GO} test github.com/ghophp/buildbot-dashboard/container
+	${GO} test github.com/ghophp/buildbot-dashboard/handler
+
+build: special-deps semaphore-build
+
+test: special-deps semaphore-test
 
 clean:
 	rm ${BIN_NAME}

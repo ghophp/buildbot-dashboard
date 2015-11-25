@@ -29,12 +29,7 @@ func (s *CacheSuite) TestSetCacheShouldCreateFile(c *gc.C) {
 	cache := NewCache(10)
 	cache.SetCache("test", []byte("test content"))
 
-	usr, err := user.Current()
-	if err != nil {
-		c.Error(err)
-	}
-
-	_, err = os.Stat(usr.HomeDir + string(filepath.Separator) + InternalCacheFolder + string(filepath.Separator) + "test")
+	_, err := os.Stat(cache.GetPath() + "test")
 	c.Check(err, gc.IsNil)
 }
 

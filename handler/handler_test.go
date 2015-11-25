@@ -7,7 +7,7 @@ import (
 	"github.com/ghophp/buildbot-dashboard/config"
 	"github.com/ghophp/buildbot-dashboard/container"
 	"github.com/ghophp/render"
-	"github.com/motain/martini"
+	"github.com/go-martini/martini"
 
 	"fmt"
 

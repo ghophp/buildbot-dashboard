@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-const InternalCacheFolder string = ".bdd"
+const InternalCacheFolder string = ".bbd"
 
 type Cache struct {
 	refreshTime int
@@ -31,10 +31,16 @@ func NewCache(t int) *Cache {
 
 	_, err = os.Stat(cc.path)
 	if os.IsNotExist(err) {
-		_ = os.Mkdir(cc.path, 0777)
+		if err = os.Mkdir(cc.path, 0777); err != nil {
+			cc.path = "/tmp/"
+		}
 	}
 
 	return cc
+}
+
+func (c *Cache) GetPath() string {
+	return c.path
 }
 
 func (c *Cache) SetCache(name string, data []byte) error {
