@@ -5,18 +5,19 @@ import (
 	"encoding/hex"
 	"regexp"
 
+	"github.com/ghophp/buildbot-dashboard/buildbot"
 	"github.com/ghophp/buildbot-dashboard/cache"
 	"github.com/ghophp/buildbot-dashboard/config"
 )
 
 // ContainerBag carries all the instantiated dependencies necessary to the handlers work
 type ContainerBag struct {
-	BuildBotUrl string
 	HashedUrl   string
 	GenericSize string
 	FilterRegex *regexp.Regexp
 	RefreshSec  int
 	Cache       *cache.Cache
+	Buildbot    buildbot.Buildbot
 }
 
 // NewContainerBag return a new instance of the ContainerBag with the instantiated dependencies for the given config
@@ -32,11 +33,11 @@ func NewContainerBag(c *config.Config) *ContainerBag {
 	}
 
 	return &ContainerBag{
-		BuildBotUrl: c.BuildBotUrl,
 		HashedUrl:   hex.EncodeToString(hasher.Sum(nil)),
 		GenericSize: c.GenericSize,
 		RefreshSec:  c.RefreshSec,
 		Cache:       cache.NewCache(c.CacheInvalidate),
 		FilterRegex: filter,
+		Buildbot:    buildbot.NewBuildbotApi(c.BuildBotUrl),
 	}
 }

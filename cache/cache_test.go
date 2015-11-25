@@ -1,9 +1,12 @@
 package cache
 
 import (
+	"os"
+	"os/user"
+	"path/filepath"
 	"testing"
 
-	gc "github.com/motain/gocheck"
+	gc "gopkg.in/check.v1"
 )
 
 var _ = gc.Suite(&CacheSuite{})
@@ -13,18 +16,42 @@ type CacheSuite struct{}
 // Hook up gocheck into the "go test" runner.
 func Test(t *testing.T) { gc.TestingT(t) }
 
+func (s *CacheSuite) SetUpTest(c *gc.C) {
+	usr, err := user.Current()
+	if err != nil {
+		c.Error(err)
+	}
+
+	os.Remove(usr.HomeDir + string(filepath.Separator) + InternalCacheFolder)
+}
+
 func (s *CacheSuite) TestSetCacheShouldCreateFile(c *gc.C) {
-	c.Skip("todo")
+	cache := NewCache(10)
+	cache.SetCache("test", []byte("test content"))
+
+	usr, err := user.Current()
+	if err != nil {
+		c.Error(err)
+	}
+
+	_, err = os.Stat(usr.HomeDir + string(filepath.Separator) + InternalCacheFolder + string(filepath.Separator) + "test")
+	c.Check(err, gc.IsNil)
 }
 
 func (s *CacheSuite) TestNonExistingKeyShouldReturnError(c *gc.C) {
-	c.Skip("todo")
-}
+	cache := NewCache(10)
+	cache.SetCache("test", []byte("test content"))
 
-func (s *CacheSuite) TestExistingCacheShouldReturnData(c *gc.C) {
-	c.Skip("todo")
+	data, err := cache.GetCache("test")
+
+	c.Check(err, gc.IsNil)
+	c.Check(string(data), gc.Equals, "test content")
 }
 
 func (s *CacheSuite) TestExpiredTimeShouldReturnError(c *gc.C) {
-	c.Skip("todo")
+	cache := NewCache(-1)
+	cache.SetCache("test", []byte("test content"))
+
+	_, err := cache.GetCache("test")
+	c.Check(err, gc.NotNil)
 }
