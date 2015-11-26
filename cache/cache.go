@@ -27,7 +27,10 @@ func NewCache(t int) *Cache {
 		return cc
 	}
 
-	cc.path = usr.HomeDir + string(filepath.Separator) + InternalCacheFolder
+	cc.path = usr.HomeDir +
+		string(filepath.Separator) +
+		InternalCacheFolder +
+		string(filepath.Separator)
 
 	_, err = os.Stat(cc.path)
 	if os.IsNotExist(err) {
