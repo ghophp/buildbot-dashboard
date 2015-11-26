@@ -29,7 +29,7 @@ How to use with [runit](https://github.com/ghophp/buildbot-dashboard/wiki/runit)
 ## Manual Build
 As this project is built in `go` you can build it in multiple platforms with:
 ```sh
-$ go get -u github.com/ghophp/buildbot-dashboard
+$ go get -d github.com/ghophp/buildbot-dashboard
 $ cd $GOPATH/src/github.com/ghophp/buildbot-dashboard
 $ make
 ```
