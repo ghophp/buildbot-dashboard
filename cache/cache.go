@@ -5,10 +5,11 @@ import (
 	"io/ioutil"
 	"os"
 	"os/user"
+	"path/filepath"
 	"time"
 )
 
-const InternalCacheFolder string = ".bbd/"
+const InternalCacheFolder string = ".bbd"
 
 type Cache struct {
 	refreshTime int
@@ -26,7 +27,10 @@ func NewCache(t int) *Cache {
 		return cc
 	}
 
-	cc.path = usr.HomeDir + "/" + InternalCacheFolder
+	cc.path = usr.HomeDir +
+		string(filepath.Separator) +
+		InternalCacheFolder +
+		string(filepath.Separator)
 
 	_, err = os.Stat(cc.path)
 	if os.IsNotExist(err) {
