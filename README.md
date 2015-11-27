@@ -4,9 +4,11 @@ If you have a CI/CD setup, it is really important to keep a central display and 
 ## Download [![Build Status](https://semaphoreci.com/api/v1/projects/44130239-880c-468f-9fa7-b976a355676a/611030/badge.svg)](https://semaphoreci.com/ghophp/buildbot-dashboard)
 The project has some precompiled binaries, if your enviroment match one of the releases above, this is the most simple way to use this project.
 
-- [FreeBSD](https://s3-eu-west-1.amazonaws.com/buildbot-dashboard/freebsd/buildbot-dashboard)
-- [Linux x64](https://s3-eu-west-1.amazonaws.com/buildbot-dashboard/linux64/buildbot-dashboard)
-- [OSX](https://s3-eu-west-1.amazonaws.com/buildbot-dashboard/mac/buildbot-dashboard)
+File Name  | OS | Arch | Size | SHA1 Binary
+---------- | -- | ---- | ---- | -------------
+[buildbot-dashboard](https://github.com/ghophp/buildbot-dashboard/releases/download/0.0.1/buildbot-dashboard.freebsd.tar.gz)  | FreeBSD | 64-bit |  13MB | 4cf9789d51613e4d5b3a61ef88b7f11ede7577ad
+[buildbot-dashboard](https://github.com/ghophp/buildbot-dashboard/releases/download/0.0.1/buildbot-dashboard.osx.tar.gz)  | OSX | 64-bit |  13MB | ea05ac2834e0fd6dbdc87f58973d80d40e219ef5
+[buildbot-dashboard](https://github.com/ghophp/buildbot-dashboard/releases/download/0.0.1/buildbot-dashboard.linux.tar.gz)  | Linux | 64-bit |  13MB | 0f1b7aea192b179dfb92e421bf02e0b411abca4d
 
 ## Running
 `buildbot` is the only required flag, you must provide the base url of the running builbot.
