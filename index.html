@@ -23,11 +23,36 @@
 <p>If you have a CI/CD setup, it is really important to keep a central display and follow the builds and process going on the CI tool. This project aims to be the dashboard that will allow you to do present better results at a central display with <code>buildbot</code>.</p>
 <h2><a id="Download_Build_Statushttpssemaphorecicomapiv1projects44130239880c468f9fa7b976a355676a611030badgesvghttpssemaphorecicomghophpbuildbotdashboard_3"></a>Download <a href="https://semaphoreci.com/ghophp/buildbot-dashboard"><img src="https://semaphoreci.com/api/v1/projects/44130239-880c-468f-9fa7-b976a355676a/611030/badge.svg" alt="Build Status"></a></h2>
 <p>The project has some precompiled binaries, if your enviroment match one of the releases above, this is the most simple way to use this project.</p>
-<ul>
-<li><a href="https://s3-eu-west-1.amazonaws.com/buildbot-dashboard/freebsd/buildbot-dashboard">FreeBSD</a></li>
-<li><a href="https://s3-eu-west-1.amazonaws.com/buildbot-dashboard/linux64/buildbot-dashboard">Linux x64</a></li>
-<li><a href="https://s3-eu-west-1.amazonaws.com/buildbot-dashboard/mac/buildbot-dashing">OSX</a></li>
-</ul>
+<table>
+<thead>
+<tr>
+<th>OS</th>
+<th>Arch</th>
+<th>Size</th>
+<th>SHA1 Binary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/ghophp/buildbot-dashboard/releases/download/0.0.1/buildbot-dashboard.freebsd.tar.gz">FreeBSD</a></td>
+<td>64-bit</td>
+<td>6,5MB</td>
+<td>4cf9789d51613e4d5b3a61ef88b7f11ede7577ad</td>
+</tr>
+<tr>
+<td><a href="https://github.com/ghophp/buildbot-dashboard/releases/download/0.0.1/buildbot-dashboard.osx.tar.gz">OSX</a></td>
+<td>64-bit</td>
+<td>6,5MB</td>
+<td>ea05ac2834e0fd6dbdc87f58973d80d40e219ef5</td>
+</tr>
+<tr>
+<td><a href="https://github.com/ghophp/buildbot-dashboard/releases/download/0.0.1/buildbot-dashboard.linux.tar.gz">Linux</a></td>
+<td>64-bit</td>
+<td>6,5MB</td>
+<td>0f1b7aea192b179dfb92e421bf02e0b411abca4d</td>
+</tr>
+</tbody>
+</table>
 <p>How to use with <a href="https://github.com/ghophp/buildbot-dashboard/wiki/runit">runit</a>.</p>
 <h2><a id="Running_9"></a>Running</h2>
 <p><code>buildbot</code> is the only required flag, you must provide the base url of the running builbot.</p>
@@ -42,11 +67,6 @@
     refresh rate <span class="hljs-keyword">in</span> seconds (default and min <span class="hljs-number">10</span> seconds) (default <span class="hljs-number">10</span>)
 -size string
     generic ui size (small|large default large) (default <span class="hljs-string">"large"</span>)
-</code></pre>
-<h2><a id="Port_and_Logs_27"></a>Port and Logs</h2>
-<p>As this project is build over <code>martini</code> please consider setting this <code>env variables</code> when deploy:</p>
-<pre><code class="language-sh"><span class="hljs-built_in">export</span> PORT=<span class="hljs-number">3000</span>
-<span class="hljs-built_in">export</span> MARTINI_ENV=production
 </code></pre>
 <h2><a id="Manual_Build_34"></a>Manual Build</h2>
 <p>As this project is built in <code>go</code> you can build it in multiple platforms with:</p>
@@ -79,6 +99,11 @@ $ ./install.sh
 <li>Create a fully adapted mode, that by the size of the display, and the number of the projects, keep “walking” through the multiple screens</li>
 <li>Use violetear</li>
 </ul>
+<h2><a id="Port_and_Logs_27"></a>Port and Logs</h2>
+<p>As this project is build over <code>martini</code> please consider setting this <code>env variables</code> when deploy:</p>
+<pre><code class="language-sh"><span class="hljs-built_in">export</span> PORT=<span class="hljs-number">3000</span>
+<span class="hljs-built_in">export</span> MARTINI_ENV=production
+</code></pre>
     <footer class="site-footer">
       <span class="site-footer-owner"><a href="https://github.com/ghophp/buildbot-dashboard">buildbot-dashboard</a> is maintained by <a href="https://github.com/ghophp">ghophp</a>.</span>
 
