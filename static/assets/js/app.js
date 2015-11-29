@@ -82,7 +82,7 @@ $(function(){
 
         ws = new ReconnectingWebSocket(new_uri);
         ws.onmessage = function(e) {
-            var message = $.parseJSON(event.data);
+            var message = $.parseJSON(e.data);
             var decoded = null;
             var builder = null;
 

@@ -25,6 +25,12 @@
 			var buildbotUrl = "{{ buildbotUrl }}";
 			var hashedUrl = "{{ hashedUrl }}";
 			var ws = null; // hold the ws connection
+
+			window.paceOptions = {
+				ajax: {
+					trackWebSockets: false
+				}
+			};
 		</script>
 
 		<!-- Vendors -->

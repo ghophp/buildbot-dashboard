@@ -29,12 +29,12 @@ func (api *BuildbotApi) FetchBuilder(id string) ([]byte, error) {
 		return nil, err
 	}
 
-	defer req.Body.Close()
 	b, err := ioutil.ReadAll(req.Body)
 	if err != nil {
 		return nil, err
 	}
 
+	req.Body.Close()
 	return b, nil
 }
 
@@ -44,12 +44,11 @@ func (api *BuildbotApi) FetchBuilders() ([]byte, error) {
 		return nil, err
 	}
 
-	defer req.Body.Close()
-
 	b, err := ioutil.ReadAll(req.Body)
 	if err != nil {
 		return nil, err
 	}
 
+	req.Body.Close()
 	return b, nil
 }

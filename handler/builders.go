@@ -15,7 +15,16 @@ const (
 	failedState     string = "failed"
 	successfulState string = "successful"
 	warningState    string = "warnings"
+	exceptionState  string = "exception"
 )
+
+var states []string = []string{
+	buildingState,
+	failedState,
+	successfulState,
+	warningState,
+	exceptionState,
+}
 
 type (
 	BuildersHandler struct {
@@ -49,6 +58,15 @@ func NewBuildersHandler(c *container.ContainerBag) *BuildersHandler {
 	}
 }
 
+func inState(v string) bool {
+	for _, s := range states {
+		if v == s {
+			return true
+		}
+	}
+	return false
+}
+
 func GetBuilder(c *container.ContainerBag, id string, builder Builder) (Builder, error) {
 	var b map[string]DetailedBuilder
 
@@ -74,14 +92,14 @@ func GetBuilder(c *container.ContainerBag, id string, builder Builder) (Builder,
 		if len(current.Times) > 0 {
 			builder.LastUpdate = strconv.FormatFloat(current.Times[0], 'f', 6, 64)
 		}
-		if len(current.Text) >= 2 {
-			if current.Text[0] == failedState {
-				builder.State = failedState
-			} else if current.Text[1] == successfulState {
-				builder.State = successfulState
+
+		if len(current.Text) > 0 {
+			for _, v := range current.Text {
+				if inState(v) {
+					builder.State = v
+					break
+				}
 			}
-		} else if len(current.Text) == 1 && current.Text[0] == warningState {
-			builder.State = warningState
 		}
 
 		return builder, nil

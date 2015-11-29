@@ -6,8 +6,12 @@ var BuildWidget = React.createClass({
         return { 
             status: "build",
             last_build: this.getLastBuildNumber(),
-            last_update: ''
+            last_update: '',
+            presentable: false
         };
+    },
+    isPresentable() {
+        return this.props.builder.number > 0 || this.props.builder.last_update;
     },
     getLastBuildNumber() {
         return this.props.builder.number;
@@ -27,7 +31,8 @@ var BuildWidget = React.createClass({
         this.setState({ 
             status: builder.state, 
             last_build: this.getLastBuildNumber(),
-            last_update: now.format('MMMM Do YYYY, HH:mm:ss') 
+            last_update: now.format('MMMM Do YYYY, HH:mm:ss'),
+            presentable: this.isPresentable()
         });
     },
     getConfigUrl() {
@@ -44,7 +49,7 @@ var BuildWidget = React.createClass({
         }
 
         var lastBuildEl = null;
-        if (this.state.last_build > 0) {
+        if (this.state.presentable) {
             lastBuildEl = React.createElement(
                 "a",
                 { className: "lnr lnr-history", href: this.getLastBuildUrl(), target: "_blank" },
@@ -57,7 +62,7 @@ var BuildWidget = React.createClass({
             { 
                 className: "widget new", 
                 "data-status": this.state.status, 
-                "data-empty": this.state.last_build > 0 ? '' : 'empty' 
+                "data-empty": this.state.presentable ? '' : 'empty' 
             },
             React.createElement(
                 "div",
@@ -77,7 +82,7 @@ var BuildWidget = React.createClass({
             React.createElement(
                 "h2",
                 { className: "value" },
-                this.state.last_build > 0 ? this.state.last_build : '-'
+                this.state.presentable ? this.state.last_build : '-'
             ),
             React.createElement(
                 "p",

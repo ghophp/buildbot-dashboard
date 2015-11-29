@@ -86,6 +86,9 @@ body {
 .widget[data-status="failed"] {
     background-color: #f04245;
 }
+.widget[data-status="exception"] {
+    background-color: #f04245;
+}
 
 .widget[data-empty="empty"] {
     background-color: #565656;

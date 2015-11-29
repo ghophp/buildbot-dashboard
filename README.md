@@ -59,10 +59,8 @@ $ go run *.go -builbot="http://10.0.0.1/"
 
 ![Apache Board Small](/preview/preview_apache_small.gif?raw=true "Apache Board Small")
 
-## Todo
-- Allow a totally compressed size to boards with a lot of builders
-- Create a fully adapted mode, that by the size of the display, and the number of the projects, keep "walking" through the multiple screens
-- Use violetear
+## File limits
+If you have a lot of builders on your buildbot, you may run into `too many open files` problem. As we want to keep the system as fast as possible on feedback a building process, we spam the routines to fetch the information from each builder all at the same time. The dashboard will not crash, `but it will be delays on presenting the state`. If you have somethinga about `80~` builders, it is recommended to increase the file limit on your system (`ulimit`).
 
 ## Martini
 As this project is build over `martini` please consider setting this `env variables` when deploy:
@@ -70,3 +68,8 @@ As this project is build over `martini` please consider setting this `env variab
 export PORT=3000
 export MARTINI_ENV=production
 ```
+
+## Todo
+- Allow a totally compressed size to boards with a lot of builders
+- Create a fully adapted mode, that by the size of the display, and the number of the projects, keep "walking" through the multiple screens
+- Use violetear
