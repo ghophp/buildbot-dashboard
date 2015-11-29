@@ -93,17 +93,19 @@ $ ./install.sh
 <h2><a id="Preview_60"></a>Preview</h2>
 <p><img src="https://github.com/ghophp/buildbot-dashboard/raw/master/preview/preview_apache.gif?raw=true" alt="Apache Board" title="Apache Board"></p>
 <p><img src="https://github.com/ghophp/buildbot-dashboard/raw/master/preview/preview_apache_small.gif?raw=true" alt="Apache Board Small" title="Apache Board Small"></p>
+<h2><a id="File_limits_70"></a>File limits</h2>
+<p>If you have a lot of builders on your buildbot, you may run into <code>too many open files</code> problem. As we want to keep the system as fast as possible on feedback a building process, we spam the routines to fetch the information from each builder all at the same time. The dashboard will not crash, <code>but it will be delays on presenting the state</code>. If you have somethinga about <code>80~</code> builders, it is recommended to increase the file limit on your system (<code>ulimit</code>).</p>
+<h2><a id="Port_and_Logs_27"></a>Martini</h2>
+<p>As this project is build over <code>martini</code> please consider setting this <code>env variables</code> when deploy:</p>
+<pre><code class="language-sh"><span class="hljs-built_in">export</span> PORT=<span class="hljs-number">3000</span>
+<span class="hljs-built_in">export</span> MARTINI_ENV=production
+</code></pre>
 <h2><a id="Todo_65"></a>Todo</h2>
 <ul>
 <li>Allow a totally compressed size to boards with a lot of builders</li>
 <li>Create a fully adapted mode, that by the size of the display, and the number of the projects, keep “walking” through the multiple screens</li>
 <li>Use violetear</li>
 </ul>
-<h2><a id="Port_and_Logs_27"></a>Port and Logs</h2>
-<p>As this project is build over <code>martini</code> please consider setting this <code>env variables</code> when deploy:</p>
-<pre><code class="language-sh"><span class="hljs-built_in">export</span> PORT=<span class="hljs-number">3000</span>
-<span class="hljs-built_in">export</span> MARTINI_ENV=production
-</code></pre>
     <footer class="site-footer">
       <span class="site-footer-owner"><a href="https://github.com/ghophp/buildbot-dashboard">buildbot-dashboard</a> is maintained by <a href="https://github.com/ghophp">ghophp</a>.</span>
 
