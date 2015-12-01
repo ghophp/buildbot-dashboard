@@ -6,9 +6,9 @@ The project has some precompiled binaries, if your enviroment match one of the r
 
 | OS                                                                                                                | Arch   | Size | SHA1 Binary                              |
 | ----------------------------------------------------------------------------------------------------------------- | ------ | ---- | ---------------------------------------- |
-| [FreeBSD](https://github.com/ghophp/buildbot-dashboard/releases/download/0.0.1/buildbot-dashboard.freebsd.tar.gz) | 64-bit | 6,5MB | 4cf9789d51613e4d5b3a61ef88b7f11ede7577ad |
-| [OSX](https://github.com/ghophp/buildbot-dashboard/releases/download/0.0.1/buildbot-dashboard.osx.tar.gz)         | 64-bit | 6,5MB | ea05ac2834e0fd6dbdc87f58973d80d40e219ef5 |
-| [Linux](https://github.com/ghophp/buildbot-dashboard/releases/download/0.0.1/buildbot-dashboard.linux.tar.gz)     | 64-bit | 6,5MB | 0f1b7aea192b179dfb92e421bf02e0b411abca4d |
+| [FreeBSD](https://github.com/ghophp/buildbot-dashboard/releases/download/0.1.0/buildbot-dashboard.freebsd.tar.gz) | 64-bit | 6,5MB | 2c45eb46dd63fe038f34031afb472ad2349c3202 |
+| [OSX](https://github.com/ghophp/buildbot-dashboard/releases/download/0.1.0/buildbot-dashboard.osx.tar.gz)         | 64-bit | 6,5MB | 61492371b00982802dc13013817c6ff791f7a1df |
+| [Linux](https://github.com/ghophp/buildbot-dashboard/releases/download/0.1.0/buildbot-dashboard.linux.tar.gz)     | 64-bit | 6,5MB | a2e3c6fc412a80034b50504e5df0e9ed3cb74126 |
 
 ## Running
 `buildbot` is the only required flag, you must provide the base url of the running builbot.
