@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"strconv"
 	"time"
 
@@ -108,11 +109,13 @@ func GetBuilder(c *container.ContainerBag, id string, builder Builder) (Builder,
 	return builder, fmt.Errorf("[GetBuilder] %s", "no last build defined")
 }
 
-func GetBuilders(c *container.ContainerBag) (map[string]Builder, error) {
+// GetBuilders will fetch the builders from buildbot, if the fresh parameter is equal true
+// it will not respect cache
+func GetBuilders(c *container.ContainerBag, fresh bool) (map[string]Builder, error) {
 	var data map[string]Builder
 
 	dataBytes, err := c.Cache.GetCache(c.HashedUrl)
-	if err != nil {
+	if fresh || err != nil {
 		dataBytes, err = c.Buildbot.FetchBuilders()
 		if err != nil {
 			return nil, err
@@ -138,8 +141,13 @@ func GetBuilders(c *container.ContainerBag) (map[string]Builder, error) {
 	return data, nil
 }
 
-func (h BuildersHandler) ServeHTTP(r render.Render) {
-	if builders, err := GetBuilders(h.c); err == nil {
+func (h BuildersHandler) ServeHTTP(req *http.Request, r render.Render) {
+	fresh, err := strconv.ParseBool(req.URL.Query().Get("fresh"))
+	if err != nil {
+		fresh = false
+	}
+
+	if builders, err := GetBuilders(h.c, fresh); err == nil {
 		r.JSON(200, builders)
 	} else {
 		r.Error(500)

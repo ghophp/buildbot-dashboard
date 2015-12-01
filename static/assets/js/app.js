@@ -28,7 +28,7 @@ $(function(){
     }).data('gridster');
 
     var widgets = {};
-    var addWidget = function(builder) {
+    function addWidget(builder) {
         var positions = null;
 
         if (localStorage && localStorage.getItem(GRIDSTER_HASHED_KEY)) {
@@ -56,48 +56,75 @@ $(function(){
 
         widgets[builder.id] = widget;
     };
-    
-    $.get("/builders", function(data) {
-        _.each(_.keys(data), function(key, i){
-            var builder = data[key]; 
-            builder.id = key;
-            
-            addWidget(builder);
-        });
 
-        var loc = window.location, new_uri;
-        if (loc.protocol === "https:") {
-            new_uri = "wss:";
-        } else {
-            new_uri = "ws:";
+    function onWsMessage(e) {
+        var message = $.parseJSON(e.data);
+        var decoded = null;
+        var builder = null;
+
+        if (message.text) {
+            decoded = Base64.decode(message.text);
+            if (decoded) {
+                builder = $.parseJSON(decoded);
+            }
         }
-        new_uri += "//" + loc.host;
-        new_uri += loc.pathname + "ws";
 
-        ws = new ReconnectingWebSocket(new_uri);
-        ws.onmessage = function(e) {
-            var message = $.parseJSON(e.data);
-            var decoded = null;
-            var builder = null;
-
-            if (message.text) {
-                decoded = Base64.decode(message.text);
-                if (decoded) {
-                    builder = $.parseJSON(decoded);
-                }
+        if (builder) {
+            if (localStorage) {
+                localStorage.setItem(hashedUrl + builder.id, decoded);
             }
 
-            if (builder) {
-                if (localStorage) {
-                    localStorage.setItem(hashedUrl + builder.id, decoded);
-                }
-
-                if (widgets[builder.id]) {
-                    widgets[builder.id].updateBuilder(builder);
-                } else if (builder.id) {
-                    addWidget(builder);
-                }
+            if (widgets[builder.id]) {
+                widgets[builder.id].updateBuilder(builder);
+            } else if (builder.id && !lockGrid) { //do not insert widget if grid is locked
+                addWidget(builder);
             }
-        };
+        }
+    }
+    
+    function loadBuilders(cache) {
+        var url = "/builders";
+        if (cache) {
+            url += "?fresh=true";
+        }
+
+        $.get(url, function(data) {
+            _.each(_.keys(data), function(key, i){
+                var builder = data[key]; 
+                builder.id = key;
+                
+                addWidget(builder);
+            });
+
+            var loc = window.location, new_uri;
+            if (loc.protocol === "https:") {
+                new_uri = "wss:";
+            } else {
+                new_uri = "ws:";
+            }
+            new_uri += "//" + loc.host;
+            new_uri += loc.pathname + "ws";
+
+            lockGrid = false;
+
+            if (!ws) {
+                ws = new ReconnectingWebSocket(new_uri);
+                ws.onmessage = onWsMessage;
+            }
+        });
+    }
+
+    loadBuilders();
+
+    $('.cache-reload').click(function(){
+        lockGrid = true;
+
+        gridster.remove_all_widgets();
+        widgets = {};
+        localStorage.clear();
+
+        setTimeout(function(){
+            loadBuilders(true);
+        }, 600);
     });
 });

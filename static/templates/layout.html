@@ -19,10 +19,13 @@
 	<body>
 		{{ yield }}
 
+		<a href="javascript:void(0)" class="lnr lnr-trash cache-reload" title="Reload cache" alt="Reload cache"></a>
+
 		<script type="text/javascript">
 			var buildbotUrl = "{{ buildbotUrl }}";
 			var hashedUrl = "{{ hashedUrl }}";
 			var ws = null; // hold the ws connection
+			var lockGrid = true;
 
 			window.paceOptions = {
 				ajax: {

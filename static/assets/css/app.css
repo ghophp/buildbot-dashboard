@@ -6,6 +6,21 @@ body {
     font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+.cache-reload {
+    position: absolute;
+    top: 50%;
+    left: -10px;
+    color: #C3C3C3;
+    padding: 5px 2px;
+    text-decoration: none;
+    background-color: #4C4C4C;
+    z-index: 999;
+}
+
+.cache-reload:hover {
+    left: 0px;
+}
+
 .gridster {
     margin: 0 auto;
 }

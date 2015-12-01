@@ -60,6 +60,11 @@ As we use gridster and a structured style, if your buildbot has a lot of builder
 
 ![Apache Board Small](/preview/preview_apache_small.gif?raw=true "Apache Board Small")
 
+## Clean Cache
+By default the project will cache the builders to avoid the delay of reloading it everytime. If you insert a new builder or remove one, you can force the reload of the cache in the UI, there is a button on left side. This button will force the builders to be reloaded and the localStorage will also be cleaned.
+
+![Clean Cache](/preview/clean_cache.png?raw=true "Clean Cache")
+
 ## Martini
 As this project is build over `martini` please consider setting this `env variables` when deploy:
 ```sh

@@ -104,7 +104,7 @@ func asyncBuilderFetch(c *container.ContainerBag, builders map[string]Builder) [
 func monitorBuilders(c *container.ContainerBag) {
 	for {
 		if len(clientList.clients) > 0 {
-			builders, err := GetBuilders(c)
+			builders, err := GetBuilders(c, false)
 			if err != nil || len(builders) <= 0 {
 				continue
 			}
