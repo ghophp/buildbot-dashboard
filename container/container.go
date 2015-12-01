@@ -3,6 +3,8 @@ package container
 import (
 	"crypto/md5"
 	"encoding/hex"
+	"log"
+	"os"
 	"regexp"
 
 	"github.com/ghophp/buildbot-dashboard/buildbot"
@@ -18,6 +20,7 @@ type ContainerBag struct {
 	RefreshSec  int
 	Cache       *cache.Cache
 	Buildbot    buildbot.Buildbot
+	Logger      *log.Logger
 }
 
 // NewContainerBag return a new instance of the ContainerBag with the instantiated dependencies for the given config
@@ -39,5 +42,6 @@ func NewContainerBag(c *config.Config) *ContainerBag {
 		Cache:       cache.NewCache(c.CacheInvalidate),
 		FilterRegex: filter,
 		Buildbot:    buildbot.NewBuildbotApi(c.BuildBotUrl),
+		Logger:      log.New(os.Stdout, "[buildbot-dashboard] ", 0),
 	}
 }

@@ -18,7 +18,7 @@ const (
 	exceptionState  string = "exception"
 )
 
-var states []string = []string{
+var validStates []string = []string{
 	buildingState,
 	failedState,
 	successfulState,
@@ -58,8 +58,8 @@ func NewBuildersHandler(c *container.ContainerBag) *BuildersHandler {
 	}
 }
 
-func inState(v string) bool {
-	for _, s := range states {
+func isValidState(v string) bool {
+	for _, s := range validStates {
 		if v == s {
 			return true
 		}
@@ -95,7 +95,7 @@ func GetBuilder(c *container.ContainerBag, id string, builder Builder) (Builder,
 
 		if len(current.Text) > 0 {
 			for _, v := range current.Text {
-				if inState(v) {
+				if isValidState(v) {
 					builder.State = v
 					break
 				}

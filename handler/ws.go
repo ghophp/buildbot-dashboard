@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/base64"
 	"encoding/json"
+	"runtime"
 	"sync"
 	"time"
 
@@ -24,6 +25,11 @@ type (
 		done       <-chan bool
 		err        <-chan error
 		disconnect chan<- int
+	}
+
+	HttpResponse struct {
+		res string
+		err error
 	}
 
 	Message struct {
@@ -63,44 +69,59 @@ func (r *ClientList) broadcast(msg *Message) {
 	defer r.Unlock()
 }
 
-func monitorBuilders(c *container.ContainerBag) {
-	responses := make(chan string)
+func asyncBuilderFetch(c *container.ContainerBag, builders map[string]Builder) []*HttpResponse {
+	ch := make(chan *HttpResponse)
+	responses := []*HttpResponse{}
 
+	for id, builder := range builders {
+		go func(id string, builder Builder) {
+			var response string
+
+			b, err := GetBuilder(c, id, builder)
+			if err == nil {
+				if r, err := json.Marshal(b); err == nil {
+					response = base64.StdEncoding.EncodeToString(r)
+				}
+			}
+
+			ch <- &HttpResponse{response, err}
+		}(id, builder)
+	}
+
+	for {
+		select {
+		case r := <-ch:
+			responses = append(responses, r)
+			if len(responses) == len(builders) {
+				return responses
+			}
+		}
+	}
+
+	return responses
+}
+
+func monitorBuilders(c *container.ContainerBag) {
 	for {
 		if len(clientList.clients) > 0 {
 			builders, err := GetBuilders(c)
 			if err != nil || len(builders) <= 0 {
-				return
+				continue
 			}
 
-			var wg sync.WaitGroup
-			wg.Add(len(builders))
-
-			for id, builder := range builders {
-				go func(id string, builder Builder) {
-					defer wg.Done()
-
-					b, err := GetBuilder(c, id, builder)
-					if err == nil {
-						if r, err := json.Marshal(b); err == nil {
-							responses <- base64.StdEncoding.EncodeToString(r)
-						}
-					}
-
-				}(id, builder)
-			}
-
-			go func() {
-				for response := range responses {
-					clientList.broadcast(&Message{response})
+			results := asyncBuilderFetch(c, builders)
+			for _, result := range results {
+				if len(result.res) > 0 {
+					clientList.broadcast(&Message{result.res})
 				}
-			}()
-
-			wg.Wait()
+			}
 		}
 
+		c.Logger.Printf("fetching builders at %d goroutines", runtime.NumGoroutine())
 		time.Sleep(time.Second * time.Duration(c.RefreshSec))
 	}
+
+	c.Logger.Printf("monitorBuilders left the routine loop")
 }
 
 func AddWs(m *martini.ClassicMartini, c *container.ContainerBag) {
