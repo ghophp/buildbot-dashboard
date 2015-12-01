@@ -100,7 +100,7 @@ $ ./install.sh
 </code></pre>
 <h2><a id="Clean_Cache_62"></a>Clean Cache</h2>
 <p>By default the project will cache the builders to avoid the delay of reloading it everytime. If you insert a new builder or remove one, you can force the reload of the cache in the UI, there is a button on left side. This button will force the builders to be reloaded and the localStorage will also be cleaned.</p>
-<p><img src="https://github.com/ghophp/buildbot-dashboard/raw/master/preview/preview/clean_cache.png?raw=true" alt="Clean Cache" title="Clean Cache"></p>
+<p><img src="https://github.com/ghophp/buildbot-dashboard/raw/master/preview/clean_cache.png?raw=true" alt="Clean Cache" title="Clean Cache"></p>
 <h2><a id="File_limits_73"></a>File limits</h2>
 <p>If you have a lot of builders on your buildbot and a filesystem with small limit of files, you may run into <code>too many open files</code> problem. As we want to keep the system as fast as possible on feedback a building process, we spam the routines to fetch the information from each builder all at the same time. The dashboard will not crash, <code>but it will be delays on presenting the state</code>. Please keep a look at logs for this problem, and if start to happen it is recommended to increase the file limit on your system (<code>ulimit</code>).</p>
     <footer class="site-footer">
