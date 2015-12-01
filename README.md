@@ -60,11 +60,6 @@ As we use gridster and a structured style, if your buildbot has a lot of builder
 
 ![Apache Board Small](/preview/preview_apache_small.gif?raw=true "Apache Board Small")
 
-## Clean Cache
-By default the project will cache the builders to avoid the delay of reloading it everytime. If you insert a new builder or remove one, you can force the reload of the cache in the UI, there is a button on left side. This button will force the builders to be reloaded and the localStorage will also be cleaned.
-
-![Clean Cache](/preview/clean_cache.png?raw=true "Clean Cache")
-
 ## Martini
 As this project is build over `martini` please consider setting this `env variables` when deploy:
 ```sh
@@ -72,9 +67,8 @@ export PORT=3000
 export MARTINI_ENV=production
 ```
 
-## Todo
-- Create a fully adapted mode, that by the size of the display, and the number of the projects, keep "walking" through the multiple screens
-- Use violetear
+## Clean Cache
+By default the project will cache the builders to avoid the delay of reloading it everytime. If you insert a new builder or remove one, you can force the reload of the cache in the UI, there is [a button on left side](https://github.com/ghophp/buildbot-dashboard/wiki/). This button will force the builders to be reloaded and the localStorage will also be cleaned.
 
 ## File limits
 If you have a lot of builders on your buildbot and a filesystem with small limit of files, you may run into `too many open files` problem. As we want to keep the system as fast as possible on feedback a building process, we spam the routines to fetch the information from each builder all at the same time. The dashboard will not crash, `but it will be delays on presenting the state`. Please keep a look at logs for this problem, and if start to happen it is recommended to increase the file limit on your system (`ulimit`).
