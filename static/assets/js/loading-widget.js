@@ -18,10 +18,7 @@ var LoadingWidget = React.createClass({
 		});
 
 		var movement = 30;
-		if (genericSize === "small") {
-			movement = 15;
-		}
-
+		
 		tl.fromTo($green, 0.4, {x: 0}, {x: movement, ease: Linear.easeNone}, start);
 		tl.fromTo($blue, 0.4, {x: 0}, {x: movement * -1, ease: Linear.easeNone}, start);
 		

@@ -15,7 +15,6 @@ import (
 // ContainerBag carries all the instantiated dependencies necessary to the handlers work
 type ContainerBag struct {
 	HashedUrl   string
-	GenericSize string
 	FilterRegex *regexp.Regexp
 	RefreshSec  int
 	Cache       *cache.Cache
@@ -37,7 +36,6 @@ func NewContainerBag(c *config.Config) *ContainerBag {
 
 	return &ContainerBag{
 		HashedUrl:   hex.EncodeToString(hasher.Sum(nil)),
-		GenericSize: c.GenericSize,
 		RefreshSec:  c.RefreshSec,
 		Cache:       cache.NewCache(c.CacheInvalidate),
 		FilterRegex: filter,

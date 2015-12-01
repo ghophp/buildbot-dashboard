@@ -32,7 +32,6 @@ type MockBuildbotApi struct {
 
 func (f *MockLoader) Load(cfg *config.Config) {
 	cfg.BuildBotUrl = f.url
-	cfg.GenericSize = "small"
 	cfg.RefreshSec = 10
 	cfg.CacheInvalidate = 10
 	cfg.Filter = f.filter
@@ -130,9 +129,6 @@ func GetNewTestRouter(ctx *container.ContainerBag) *martini.ClassicMartini {
 		IndentJSON: true,
 		Funcs: []template.FuncMap{
 			{
-				"genericSize": func() string {
-					return ctx.GenericSize
-				},
 				"buildbotUrl": func() string {
 					return ctx.Buildbot.GetUrl()
 				},

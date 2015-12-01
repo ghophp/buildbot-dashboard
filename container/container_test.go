@@ -18,7 +18,6 @@ type MockLoader struct{}
 
 func (f *MockLoader) Load(cfg *config.Config) {
 	cfg.BuildBotUrl = "http://10.0.0.1"
-	cfg.GenericSize = "small"
 	cfg.RefreshSec = 10
 	cfg.CacheInvalidate = 10
 	cfg.Filter = ".*"
@@ -37,7 +36,6 @@ func (s *ContainerBagSuite) TestNewContainerBagMustInitializeComponentsIfConfigP
 	ctx := NewContainerBag(cfg)
 
 	c.Check(ctx.HashedUrl, gc.Equals, hex.EncodeToString(hasher.Sum(nil)))
-	c.Check(ctx.GenericSize, gc.Equals, cfg.GenericSize)
 	c.Check(ctx.RefreshSec, gc.Equals, cfg.RefreshSec)
 	c.Check(ctx.FilterRegex, gc.NotNil)
 	c.Check(ctx.Cache, gc.NotNil)

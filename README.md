@@ -22,8 +22,6 @@ $ ./buildbot_dashboard -h
 	cache invalidate in seconds (default and min 5 minutes) (default 10)
 -refresh int
 	refresh rate in seconds (default and min 10 seconds) (default 10)
--size string
-	generic ui size (small|large default large) (default "large")
 ```
 
 How to use with [runit](https://github.com/ghophp/buildbot-dashboard/wiki/runit).
@@ -53,14 +51,14 @@ $ go run *.go -builbot="http://10.0.0.1/"
 - `Filter` options allow you to just show what matters
 - `Base64` communication with websockets (light)
 - Save arrangement of the dashboard
+- `Zoom compliant` layout
 
 ## Preview
 ![Apache Board](/preview/preview_apache.gif?raw=true "Apache Board")
 
-![Apache Board Small](/preview/preview_apache_small.gif?raw=true "Apache Board Small")
+As we use gridster and a structured style, if your buildbot has a lot of builders, you can take advantage of the `browser zoom` to reduce the size of the blocks and so, use more space to move your grid.
 
-## File limits
-If you have a lot of builders on your buildbot, you may run into `too many open files` problem. As we want to keep the system as fast as possible on feedback a building process, we spam the routines to fetch the information from each builder all at the same time. The dashboard will not crash, `but it will be delays on presenting the state`. If you have somethinga about `80~` builders, it is recommended to increase the file limit on your system (`ulimit`).
+![Apache Board Small](/preview/preview_apache_small.gif?raw=true "Apache Board Small")
 
 ## Martini
 As this project is build over `martini` please consider setting this `env variables` when deploy:
@@ -70,6 +68,8 @@ export MARTINI_ENV=production
 ```
 
 ## Todo
-- Allow a totally compressed size to boards with a lot of builders
 - Create a fully adapted mode, that by the size of the display, and the number of the projects, keep "walking" through the multiple screens
 - Use violetear
+
+## File limits
+If you have a lot of builders on your buildbot and a filesystem with small limit of files, you may run into `too many open files` problem. As we want to keep the system as fast as possible on feedback a building process, we spam the routines to fetch the information from each builder all at the same time. The dashboard will not crash, `but it will be delays on presenting the state`. Please keep a look at logs for this problem, and if start to happen it is recommended to increase the file limit on your system (`ulimit`).

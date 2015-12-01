@@ -14,7 +14,6 @@ type MockLoader struct{}
 
 func (f *MockLoader) Load(cfg *Config) {
 	cfg.BuildBotUrl = "http://10.0.0.1"
-	cfg.GenericSize = "will_be_replaced"
 	cfg.RefreshSec = 0
 	cfg.CacheInvalidate = 0
 	cfg.Filter = ""
@@ -36,7 +35,6 @@ func (s *ConfigSuite) TestNewConfigShouldHaveDefaultValues(c *gc.C) {
 	c.Check(err, gc.IsNil)
 
 	c.Check(cfg.BuildBotUrl, gc.Equals, "http://10.0.0.1/")
-	c.Check(cfg.GenericSize, gc.Equals, "large")
 	c.Check(cfg.RefreshSec, gc.Equals, 10)
 	c.Check(cfg.CacheInvalidate, gc.Equals, 5)
 	c.Check(cfg.Filter, gc.Equals, "")

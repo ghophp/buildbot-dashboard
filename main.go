@@ -28,9 +28,6 @@ func NewRouter(c *container.ContainerBag) *martini.ClassicMartini {
 		IndentJSON: true,
 		Funcs: []template.FuncMap{
 			{
-				"genericSize": func() string {
-					return c.GenericSize
-				},
 				"buildbotUrl": func() string {
 					return c.Buildbot.GetUrl()
 				},

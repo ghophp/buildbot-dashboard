@@ -2,14 +2,8 @@ $(function(){
 
     var GRIDSTER_HASHED_KEY = hashedUrl + 'gridster';
 
-    // more sizes can be implemented in the future
-    var currentSizeDimension = [140, 140];
-    if (genericSize == 'small') {
-        currentSizeDimension = [100, 100];
-    }
-
     var gridster = $(".gridster ul").gridster({
-        widget_base_dimensions: currentSizeDimension,
+        widget_base_dimensions: [140, 140],
         widget_margins: [10, 10],
         autogrow_cols: true,
         serialize_params: function ($w, wgd) {

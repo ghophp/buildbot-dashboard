@@ -39,6 +39,7 @@ body {
     width: 100%;
     display: table-cell;
     vertical-align: middle;
+    padding: 25px 12px;
 }
 
 .widget h1.title {
@@ -46,11 +47,16 @@ body {
     font-weight: 400;
     word-wrap: break-word;
     overflow: hidden;
+    margin-bottom: 12px;
+    font-size: 30px;
+    max-width: 276px;
+    height: 63px;
 }
 
 .widget h2.value {
     text-transform: uppercase;
     font-weight: 700;
+    font-size: 76px;
 }
 
 .widget p.more-info {
@@ -58,6 +64,8 @@ body {
     position: absolute;
     left: 0;
     right: 0;
+    font-size: 15px;
+    bottom: 32px;
 }
 
 .widget p.updated-at {
@@ -65,6 +73,8 @@ body {
     position: absolute;
     left: 0;
     right: 0;
+    font-size: 15px;
+    bottom: 12px;
 }
 
 .widget[data-status="build"] {
@@ -103,6 +113,8 @@ body {
 .loading-container {
     position: absolute;
     transform: translateX(-50%) translateY(-50%);
+    bottom: 50px;
+    left: 54%;
 }
 .dot {
     display: block;
@@ -110,6 +122,7 @@ body {
     height: 10px;
     border-radius: 5px;
     float: left;
+    margin-right: 20px;
 }
 
 .red {

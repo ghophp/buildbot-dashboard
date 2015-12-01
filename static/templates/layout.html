@@ -15,13 +15,11 @@
 
 		<!-- Style -->
 		<link rel="stylesheet" href="css/app.css">
-		<link rel="stylesheet" href="css/size/{{ genericSize }}.css">
 	</head>
 	<body>
 		{{ yield }}
 
 		<script type="text/javascript">
-			var genericSize = "{{ genericSize }}";
 			var buildbotUrl = "{{ buildbotUrl }}";
 			var hashedUrl = "{{ hashedUrl }}";
 			var ws = null; // hold the ws connection
