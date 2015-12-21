@@ -13,6 +13,10 @@ import (
 	"github.com/go-martini/martini"
 )
 
+const (
+	CloseNormalClosure = 1000
+)
+
 type (
 	ClientList struct {
 		sync.Mutex
@@ -129,7 +133,7 @@ func AddWs(m *martini.ClassicMartini, c *container.ContainerBag) {
 
 	go monitorBuilders(c)
 
-	m.Get("/ws", sockets.JSON(Message{}),
+	m.Get("/ws", sockets.JSON(Message{}, &sockets.Options{WriteWait: 60 * time.Second}),
 		func(params martini.Params,
 			receiver <-chan *Message,
 			sender chan<- *Message,
@@ -137,11 +141,16 @@ func AddWs(m *martini.ClassicMartini, c *container.ContainerBag) {
 			disconnect chan<- int,
 			err <-chan error) (int, string) {
 
+			// renew connection each 20 minutes
+			ticker := time.After(20 * time.Minute)
+
 			client := &Client{receiver, sender, done, err, disconnect}
 			clientList.appendClient(client)
 
 			for {
 				select {
+				case <-ticker:
+					disconnect <- CloseNormalClosure
 				case <-client.done:
 					clientList.removeClient(client)
 					return 200, "OK"
