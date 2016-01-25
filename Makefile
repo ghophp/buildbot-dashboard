@@ -6,7 +6,6 @@ BIN_NAME=buildbot-dashboard
 all: build test
 
 deps:
-	${GO} get -u -d github.com/ghophp/buildbot-dashboard
 	${GO} get gopkg.in/check.v1
 	${GO} get github.com/ghophp/render
 	${GO} get github.com/go-martini/martini
