@@ -76,4 +76,4 @@ If you have a lot of builders on your buildbot and a filesystem with small limit
 
 Thanks to [nbari](https://github.com/nbari) and [paw](https://luckymarmot.com/paw) for helping and supporting open source.
 
-![](/preview/paw.png =30x30)
+![](/preview/paw.png)
