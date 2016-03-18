@@ -34,22 +34,22 @@
 </thead>
 <tbody>
 <tr>
-<td><a href="https://github.com/ghophp/buildbot-dashboard/releases/download/0.1.0/buildbot-dashboard.freebsd.tar.gz">FreeBSD</a></td>
+<td><a href="https://github.com/ghophp/buildbot-dashboard/releases/download/0.1.0/buildbot-dashboard.freebsd.zip">FreeBSD</a></td>
 <td>64-bit</td>
 <td>6,5MB</td>
-<td>2c45eb46dd63fe038f34031afb472ad2349c3202</td>
+<td>7f9ef1050672e45c9d8a723bd7cb11df7a0a3aa4</td>
 </tr>
 <tr>
-<td><a href="https://github.com/ghophp/buildbot-dashboard/releases/download/0.1.0/buildbot-dashboard.osx.tar.gz">OSX</a></td>
+<td><a href="https://github.com/ghophp/buildbot-dashboard/releases/download/0.1.0/buildbot-dashboard.osx.zip">OSX</a></td>
 <td>64-bit</td>
 <td>6,5MB</td>
-<td>61492371b00982802dc13013817c6ff791f7a1df</td>
+<td>a92753b1c04ab63caaba79cd4c74555068695fa1</td>
 </tr>
 <tr>
-<td><a href="https://github.com/ghophp/buildbot-dashboard/releases/download/0.1.0/buildbot-dashboard.linux.tar.gz">Linux</a></td>
+<td><a href="https://github.com/ghophp/buildbot-dashboard/releases/download/0.1.0/buildbot-dashboard.linux.zip">Linux</a></td>
 <td>64-bit</td>
 <td>6,5MB</td>
-<td>a2e3c6fc412a80034b50504e5df0e9ed3cb74126</td>
+<td>b55321cff1010b038eeb507ac6f024d97d891663</td>
 </tr>
 </tbody>
 </table>
@@ -81,11 +81,10 @@ $ ./install.sh
 </code></pre>
 <h2><a id="Features_52"></a>Features</h2>
 <ul>
-<li>Non-reload monitoring through <code>websockets</code></li>
+<li>Non-reload monitoring</li>
 <li>Enhanced UI with better visualization of the builders</li>
-<li>Easy usage with single command (<code>binary assets</code>)</li>
+<li>Easy usage with single command</li>
 <li><code>Filter</code> options allow you to just show what matters</li>
-<li><code>Base64</code> communication with websockets (light)</li>
 <li>Save arrangement of the dashboard</li>
 <li><code>Zoom compliant</code> layout</li>
 </ul>
@@ -102,6 +101,9 @@ $ ./install.sh
 <p>By default the project will cache the builders to avoid the delay of reloading it everytime. If you insert a new builder or remove one, you can force the reload of the cache in the UI, there is <a href="https://github.com/ghophp/buildbot-dashboard/wiki/">a button on left side</a>. This button will force the builders to be reloaded and the localStorage will also be cleaned.</p>
 <h2><a id="File_limits_73"></a>File limits</h2>
 <p>If you have a lot of builders on your buildbot and a filesystem with small limit of files, you may run into <code>too many open files</code> problem. As we want to keep the system as fast as possible on feedback a building process, we spam the routines to fetch the information from each builder all at the same time. The dashboard will not crash, <code>but it will be delays on presenting the state</code>. Please keep a look at logs for this problem, and if start to happen it is recommended to increase the file limit on your system (<code>ulimit</code>).</p>
+<hr>
+<p>Thanks to <a href="https://github.com/nbari">nbari</a> and <a href="https://luckymarmot.com/paw">paw</a> for helping and supporting open source.</p>
+<p><img src="https://github.com/ghophp/buildbot-dashboard/raw/master/preview/paw.png" alt=""></p>
     <footer class="site-footer">
       <span class="site-footer-owner"><a href="https://github.com/ghophp/buildbot-dashboard">buildbot-dashboard</a> is maintained by <a href="https://github.com/ghophp">ghophp</a>.</span>
 
