@@ -6,9 +6,9 @@ The project has some precompiled binaries, if your enviroment match one of the r
 
 | OS                                                                                                                | Arch   | Size | SHA1 Binary                              |
 | ----------------------------------------------------------------------------------------------------------------- | ------ | ---- | ---------------------------------------- |
-| [FreeBSD](https://github.com/ghophp/buildbot-dashboard/releases/download/0.1.0/buildbot-dashboard.freebsd.tar.gz) | 64-bit | 6,5MB | 2c45eb46dd63fe038f34031afb472ad2349c3202 |
-| [OSX](https://github.com/ghophp/buildbot-dashboard/releases/download/0.1.0/buildbot-dashboard.osx.tar.gz)         | 64-bit | 6,5MB | 61492371b00982802dc13013817c6ff791f7a1df |
-| [Linux](https://github.com/ghophp/buildbot-dashboard/releases/download/0.1.0/buildbot-dashboard.linux.tar.gz)     | 64-bit | 6,5MB | a2e3c6fc412a80034b50504e5df0e9ed3cb74126 |
+| [FreeBSD](https://github.com/ghophp/buildbot-dashboard/releases/download/0.2.0/buildbot-dashboard.freebsd.tar.gz) | 64-bit | 6,5MB | 2c45eb46dd63fe038f34031afb472ad2349c3202 |
+| [OSX](https://github.com/ghophp/buildbot-dashboard/releases/download/0.2.0/buildbot-dashboard.osx.zip)         | 64-bit | 6,5MB | a92753b1c04ab63caaba79cd4c74555068695fa1 |
+| [Linux](https://github.com/ghophp/buildbot-dashboard/releases/download/0.2.0/buildbot-dashboard.linux.tar.gz)     | 64-bit | 6,5MB | a2e3c6fc412a80034b50504e5df0e9ed3cb74126 |
 
 ## Running
 `buildbot` is the only required flag, you must provide the base url of the running builbot.
@@ -21,7 +21,7 @@ $ ./buildbot_dashboard -h
 -invalidate int
 	cache invalidate in seconds (default and min 5 minutes) (default 10)
 -refresh int
-	refresh rate in seconds (default and min 10 seconds) (default 10)
+	refresh rate in seconds (default and min 20 seconds) (default 20)
 ```
 
 How to use with [runit](https://github.com/ghophp/buildbot-dashboard/wiki/runit).
@@ -45,11 +45,10 @@ $ go run *.go -builbot="http://10.0.0.1/"
 ```
 
 ## Features
-- Non-reload monitoring through `websockets`
+- Non-reload monitoring
 - Enhanced UI with better visualization of the builders
-- Easy usage with single command (`binary assets`)
+- Easy usage with single command
 - `Filter` options allow you to just show what matters
-- `Base64` communication with websockets (light)
 - Save arrangement of the dashboard
 - `Zoom compliant` layout
 
@@ -72,3 +71,9 @@ By default the project will cache the builders to avoid the delay of reloading i
 
 ## File limits
 If you have a lot of builders on your buildbot and a filesystem with small limit of files, you may run into `too many open files` problem. As we want to keep the system as fast as possible on feedback a building process, we spam the routines to fetch the information from each builder all at the same time. The dashboard will not crash, `but it will be delays on presenting the state`. Please keep a look at logs for this problem, and if start to happen it is recommended to increase the file limit on your system (`ulimit`).
+
+---
+
+Thanks to [nbari](https://github.com/nbari) and [paw](https://luckymarmot.com/paw) for helping and supporting open source.
+
+![](./preview/paw.png =30x30)

@@ -24,9 +24,7 @@
 		<script type="text/javascript">
 			var buildbotUrl = "{{ buildbotUrl }}";
 			var hashedUrl = "{{ hashedUrl }}";
-			var ws = null; // hold the ws connection
-			var lockGrid = true;
-
+			var refreshSec = parseInt("{{ refreshSec }}", 10)
 			window.paceOptions = {
 				ajax: {
 					trackWebSockets: false

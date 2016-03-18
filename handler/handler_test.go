@@ -2,6 +2,7 @@ package handler
 
 import (
 	"html/template"
+	"strconv"
 	"testing"
 
 	"github.com/ghophp/buildbot-dashboard/config"
@@ -129,6 +130,9 @@ func GetNewTestRouter(ctx *container.ContainerBag) *martini.ClassicMartini {
 		IndentJSON: true,
 		Funcs: []template.FuncMap{
 			{
+				"refreshSec": func() string {
+					return strconv.Itoa(ctx.RefreshSec)
+				},
 				"buildbotUrl": func() string {
 					return ctx.Buildbot.GetUrl()
 				},

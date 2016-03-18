@@ -7,7 +7,7 @@ import (
 
 const (
 	genericSize     string = "large"
-	minRefreshRate  int    = 10
+	minRefreshRate  int    = 20
 	cacheInvalidate int    = 5
 )
 
@@ -26,7 +26,7 @@ type FlagLoader struct{}
 
 func (f *FlagLoader) Load(cfg *Config) {
 	flag.StringVar(&cfg.BuildBotUrl, "buildbot", "", "buildbot url eg. http://10.0.0.1/")
-	flag.IntVar(&cfg.RefreshSec, "refresh", minRefreshRate, "refresh rate in seconds (default and min 10 seconds)")
+	flag.IntVar(&cfg.RefreshSec, "refresh", minRefreshRate, "refresh rate in seconds (default and min 30 seconds)")
 	flag.IntVar(&cfg.CacheInvalidate, "invalidate", cacheInvalidate, "cache invalidate in seconds (default and min 5 minutes)")
 	flag.StringVar(&cfg.Filter, "filter", "", "regex applied over the builder name")
 

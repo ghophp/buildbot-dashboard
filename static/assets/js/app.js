@@ -55,32 +55,18 @@ $(function(){
         }
 
         widgets[builder.id] = widget;
+        setInterval(function(){
+            $.get("/builder/" + builder.id, function(builder){
+                if (localStorage) {
+                    localStorage.setItem(hashedUrl + builder.id, JSON.stringify(builder));
+                }
+
+                if (widgets[builder.id]) {
+                    widgets[builder.id].updateBuilder(builder);
+                }
+            });
+        }, refreshSec * 1000);
     };
-
-    function onWsMessage(e) {
-        var message = $.parseJSON(e.data);
-        var decoded = null;
-        var builder = null;
-
-        if (message.text) {
-            decoded = Base64.decode(message.text);
-            if (decoded) {
-                builder = $.parseJSON(decoded);
-            }
-        }
-
-        if (builder) {
-            if (localStorage) {
-                localStorage.setItem(hashedUrl + builder.id, decoded);
-            }
-
-            if (widgets[builder.id]) {
-                widgets[builder.id].updateBuilder(builder);
-            } else if (builder.id && !lockGrid) { //do not insert widget if grid is locked
-                addWidget(builder);
-            }
-        }
-    }
     
     function loadBuilders(cache) {
         var url = "/builders";
@@ -104,21 +90,12 @@ $(function(){
             }
             new_uri += "//" + loc.host;
             new_uri += loc.pathname + "ws";
-
-            lockGrid = false;
-
-            if (!ws) {
-                ws = new ReconnectingWebSocket(new_uri);
-                ws.onmessage = onWsMessage;
-            }
         });
     }
 
     loadBuilders();
 
     $('.cache-reload').click(function(){
-        lockGrid = true;
-
         gridster.remove_all_widgets();
         widgets = {};
         localStorage.clear();

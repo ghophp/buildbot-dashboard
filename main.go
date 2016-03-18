@@ -2,6 +2,7 @@ package main
 
 import (
 	"html/template"
+	"strconv"
 
 	"github.com/ghophp/buildbot-dashboard/config"
 	"github.com/ghophp/buildbot-dashboard/container"
@@ -28,6 +29,9 @@ func NewRouter(c *container.ContainerBag) *martini.ClassicMartini {
 		IndentJSON: true,
 		Funcs: []template.FuncMap{
 			{
+				"refreshSec": func() string {
+					return strconv.Itoa(c.RefreshSec)
+				},
 				"buildbotUrl": func() string {
 					return c.Buildbot.GetUrl()
 				},
@@ -39,9 +43,8 @@ func NewRouter(c *container.ContainerBag) *martini.ClassicMartini {
 	}))
 
 	router.Get("/", indexHandler.ServeHTTP)
-	router.Get("/builders", buildersHandler.ServeHTTP)
-
-	handler.AddWs(router, c)
+	router.Get("/builders", buildersHandler.GetBuilders)
+	router.Get("/builder/:id", buildersHandler.GetBuilder)
 
 	return router
 }

@@ -9,6 +9,7 @@ import (
 
 	"github.com/ghophp/buildbot-dashboard/container"
 	"github.com/ghophp/render"
+	"github.com/go-martini/martini"
 )
 
 const (
@@ -68,27 +69,29 @@ func isValidState(v string) bool {
 	return false
 }
 
-func GetBuilder(c *container.ContainerBag, id string, builder Builder) (Builder, error) {
+func (h BuildersHandler) fetchBuilder(id string) (*Builder, error) {
 	var b map[string]DetailedBuilder
 
-	data, err := c.Buildbot.FetchBuilder(id)
+	data, err := h.c.Buildbot.FetchBuilder(id)
 	if err != nil {
-		return builder, err
+		return nil, err
 	}
 
 	if err := json.Unmarshal(data, &b); err != nil {
-		return builder, err
+		return nil, err
 	}
 
 	if current, ok := b["-1"]; ok && current.Error == "" {
 
-		builder.Id = id
-		builder.Blame = current.Blame
-		builder.Number = current.Number
-		builder.Slave = current.Slave
-		builder.Reason = current.Reason
-		builder.State = buildingState
-		builder.LastUpdate = strconv.Itoa(int(time.Now().Unix()))
+		builder := &Builder{
+			Id:         id,
+			Blame:      current.Blame,
+			Number:     current.Number,
+			Slave:      current.Slave,
+			Reason:     current.Reason,
+			State:      buildingState,
+			LastUpdate: strconv.Itoa(int(time.Now().Unix())),
+		}
 
 		if len(current.Times) > 0 {
 			builder.LastUpdate = strconv.FormatFloat(current.Times[0], 'f', 6, 64)
@@ -106,22 +109,22 @@ func GetBuilder(c *container.ContainerBag, id string, builder Builder) (Builder,
 		return builder, nil
 	}
 
-	return builder, fmt.Errorf("[GetBuilder] %s", "no last build defined")
+	return nil, fmt.Errorf("[GetBuilder] %s", "no last build defined")
 }
 
-// GetBuilders will fetch the builders from buildbot, if the fresh parameter is equal true
+// fetchBuilders will fetch the builders from buildbot, if the fresh parameter is equal true
 // it will not respect cache
-func GetBuilders(c *container.ContainerBag, fresh bool) (map[string]Builder, error) {
+func (h BuildersHandler) fetchBuilders(fresh bool) (map[string]Builder, error) {
 	var data map[string]Builder
 
-	dataBytes, err := c.Cache.GetCache(c.HashedUrl)
+	dataBytes, err := h.c.Cache.GetCache(h.c.HashedUrl)
 	if fresh || err != nil {
-		dataBytes, err = c.Buildbot.FetchBuilders()
+		dataBytes, err = h.c.Buildbot.FetchBuilders()
 		if err != nil {
 			return nil, err
 		}
 
-		if err := c.Cache.SetCache(c.HashedUrl, dataBytes); err != nil {
+		if err := h.c.Cache.SetCache(h.c.HashedUrl, dataBytes); err != nil {
 			return nil, err
 		}
 	}
@@ -130,9 +133,9 @@ func GetBuilders(c *container.ContainerBag, fresh bool) (map[string]Builder, err
 		return nil, err
 	}
 
-	if c.FilterRegex != nil {
+	if h.c.FilterRegex != nil {
 		for key, _ := range data {
-			if !c.FilterRegex.MatchString(key) {
+			if !h.c.FilterRegex.MatchString(key) {
 				delete(data, key)
 			}
 		}
@@ -141,15 +144,25 @@ func GetBuilders(c *container.ContainerBag, fresh bool) (map[string]Builder, err
 	return data, nil
 }
 
-func (h BuildersHandler) ServeHTTP(req *http.Request, r render.Render) {
+func (h BuildersHandler) GetBuilders(req *http.Request, r render.Render) {
 	fresh, err := strconv.ParseBool(req.URL.Query().Get("fresh"))
 	if err != nil {
 		fresh = false
 	}
 
-	if builders, err := GetBuilders(h.c, fresh); err == nil {
+	if builders, err := h.fetchBuilders(fresh); err == nil {
 		r.JSON(200, builders)
 	} else {
 		r.Error(500)
+	}
+}
+
+func (h BuildersHandler) GetBuilder(params martini.Params, r render.Render) {
+	builder, err := h.fetchBuilder(params["id"])
+	if err != nil {
+		fmt.Println(err)
+		r.Error(500)
+	} else {
+		r.JSON(200, builder)
 	}
 }

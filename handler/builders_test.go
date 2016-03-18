@@ -14,7 +14,7 @@ func ServeHTTPForContainer(ctn *container.ContainerBag) *httptest.ResponseRecord
 	router := GetNewTestRouter(ctn)
 
 	handler := NewBuildersHandler(ctn)
-	router.Get("/foobar", handler.ServeHTTP)
+	router.Get("/foobar", handler.GetBuilders)
 
 	res := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/foobar", nil)
@@ -52,33 +52,15 @@ func (s *HandlerSuite) TestGetBuildersMustFilterBuilders(c *gc.C) {
 }
 
 func (s *HandlerSuite) TestGetBuilderMustUpdateBuilder(c *gc.C) {
-	b := Builder{
-		Id:         "buildbot-dashboard",
-		State:      "",
-		Reason:     "",
-		Blame:      []string{},
-		Number:     0,
-		Slave:      "",
-		LastUpdate: "",
-	}
-
-	b, err := GetBuilder(GetNewContainerBag(c, "http://10.0.0.1", ""), b.Id, b)
+	handler := NewBuildersHandler(GetNewContainerBag(c, "http://10.0.0.1", ""))
+	b, err := handler.fetchBuilder("buildbot-dashboard")
 	c.Check(err, gc.IsNil)
 	c.Check(b.State, gc.Equals, failedState)
 	c.Check(b.Number, gc.Equals, 8)
 }
 
 func (s *HandlerSuite) TestGetBuilderMustReturnErrorForWrongId(c *gc.C) {
-	b := Builder{
-		Id:         "xxxx",
-		State:      "",
-		Reason:     "",
-		Blame:      []string{},
-		Number:     0,
-		Slave:      "",
-		LastUpdate: "",
-	}
-
-	b, err := GetBuilder(GetNewContainerBag(c, "http://10.0.0.1", ""), b.Id, b)
+	handler := NewBuildersHandler(GetNewContainerBag(c, "http://10.0.0.1", ""))
+	_, err := handler.fetchBuilder("xxxx")
 	c.Check(err, gc.NotNil)
 }
