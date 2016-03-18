@@ -6,9 +6,9 @@ The project has some precompiled binaries, if your enviroment match one of the r
 
 | OS                                                                                                                | Arch   | Size | SHA1 Binary                              |
 | ----------------------------------------------------------------------------------------------------------------- | ------ | ---- | ---------------------------------------- |
-| [FreeBSD](https://github.com/ghophp/buildbot-dashboard/releases/download/0.2.0/buildbot-dashboard.freebsd.tar.gz) | 64-bit | 6,5MB | 2c45eb46dd63fe038f34031afb472ad2349c3202 |
-| [OSX](https://github.com/ghophp/buildbot-dashboard/releases/download/0.2.0/buildbot-dashboard.osx.zip)         | 64-bit | 6,5MB | a92753b1c04ab63caaba79cd4c74555068695fa1 |
-| [Linux](https://github.com/ghophp/buildbot-dashboard/releases/download/0.2.0/buildbot-dashboard.linux.tar.gz)     | 64-bit | 6,5MB | a2e3c6fc412a80034b50504e5df0e9ed3cb74126 |
+| [FreeBSD](https://github.com/ghophp/buildbot-dashboard/releases/download/0.2.0/buildbot-dashboard.freebsd.zip) 	| 64-bit | 6,5MB | 7f9ef1050672e45c9d8a723bd7cb11df7a0a3aa4 |
+| [OSX](https://github.com/ghophp/buildbot-dashboard/releases/download/0.2.0/buildbot-dashboard.osx.zip)         	| 64-bit | 6,5MB | a92753b1c04ab63caaba79cd4c74555068695fa1 |
+| [Linux](https://github.com/ghophp/buildbot-dashboard/releases/download/0.2.0/buildbot-dashboard.linux.zip)     	| 64-bit | 6,5MB | b55321cff1010b038eeb507ac6f024d97d891663 |
 
 ## Running
 `buildbot` is the only required flag, you must provide the base url of the running builbot.
@@ -76,4 +76,4 @@ If you have a lot of builders on your buildbot and a filesystem with small limit
 
 Thanks to [nbari](https://github.com/nbari) and [paw](https://luckymarmot.com/paw) for helping and supporting open source.
 
-![](./preview/paw.png =30x30)
+![](/preview/paw.png =30x30)
