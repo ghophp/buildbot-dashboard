@@ -6,8 +6,8 @@ The project has some precompiled binaries, if your enviroment match one of the r
 
 | OS                                                                                                                | Arch   | Size | SHA1 Binary                              |
 | ----------------------------------------------------------------------------------------------------------------- | ------ | ---- | ---------------------------------------- |
-| [OSX](https://s3-eu-west-1.amazonaws.com/buildbot-dashboard/master/osx/buildbot-dashboard)         				| 64-bit | 6,5MB | b8990466151cddc6097e5af84f15f420b366aa6e |
-| [Linux](https://s3-eu-west-1.amazonaws.com/buildbot-dashboard/master/linux/buildbot-dashboard)     				| 64-bit | 6,5MB | 2df4875acc7127bca5f3a74ad556b641d668eeb5 |
+| [OSX](https://s3-eu-west-1.amazonaws.com/buildbot-dashboard/master/osx/buildbot-dashboard)         				| 64-bit | 6,5MB | 2df4875acc7127bca5f3a74ad556b641d668eeb5 |
+| [Linux](https://s3-eu-west-1.amazonaws.com/buildbot-dashboard/master/linux/buildbot-dashboard)     				| 64-bit | 6,5MB | b8990466151cddc6097e5af84f15f420b366aa6e |
 
 ## Running
 `buildbot` is the only required flag, you must provide the base url of the running builbot.
