@@ -6,6 +6,7 @@ BIN_NAME=buildbot-dashboard
 all: build test
 
 deps:
+	${GO} get github.com/mattn/goveralls
 	${GO} get github.com/op/go-logging
 	${GO} get gopkg.in/check.v1
 	${GO} get github.com/ghophp/render
@@ -25,6 +26,7 @@ test:
 	${GO} test github.com/ghophp/buildbot-dashboard/cache
 	${GO} test github.com/ghophp/buildbot-dashboard/config
 	${GO} test github.com/ghophp/buildbot-dashboard/handler
+	./script/coverage.sh --coveralls
 
 clean:
 	rm -rf bin/latest/${BIN_NAME}
