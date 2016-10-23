@@ -7,7 +7,11 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/ghophp/buildbot-dashboard/container"
+	bb "github.com/ghophp/buildbot-dashboard/buildbot"
+	cc "github.com/ghophp/buildbot-dashboard/cache"
+	"github.com/ghophp/buildbot-dashboard/config"
+	"github.com/op/go-logging"
+
 	"github.com/ghophp/render"
 	"github.com/go-martini/martini"
 )
@@ -30,7 +34,10 @@ var validStates []string = []string{
 
 type (
 	BuildersHandler struct {
-		c *container.ContainerBag
+		cfg      *config.Config
+		buildbot bb.Buildbot
+		cache    *cc.Cache
+		logger   *logging.Logger
 	}
 
 	Builder struct {
@@ -54,10 +61,8 @@ type (
 	}
 )
 
-func NewBuildersHandler(c *container.ContainerBag) *BuildersHandler {
-	return &BuildersHandler{
-		c: c,
-	}
+func NewBuildersHandler(cfg *config.Config, buildbot bb.Buildbot, cache *cc.Cache, logger *logging.Logger) *BuildersHandler {
+	return &BuildersHandler{cfg, buildbot, cache, logger}
 }
 
 func isValidState(v string) bool {
@@ -72,7 +77,7 @@ func isValidState(v string) bool {
 func (h BuildersHandler) fetchBuilder(id string) (*Builder, error) {
 	var b map[string]DetailedBuilder
 
-	data, err := h.c.Buildbot.FetchBuilder(id)
+	data, err := h.buildbot.FetchBuilder(id)
 	if err != nil {
 		return nil, err
 	}
@@ -82,7 +87,6 @@ func (h BuildersHandler) fetchBuilder(id string) (*Builder, error) {
 	}
 
 	if current, ok := b["-1"]; ok && current.Error == "" {
-
 		builder := &Builder{
 			Id:         id,
 			Blame:      current.Blame,
@@ -117,14 +121,14 @@ func (h BuildersHandler) fetchBuilder(id string) (*Builder, error) {
 func (h BuildersHandler) fetchBuilders(fresh bool) (map[string]Builder, error) {
 	var data map[string]Builder
 
-	dataBytes, err := h.c.Cache.GetCache(h.c.HashedUrl)
+	dataBytes, err := h.cache.GetCache(h.cfg.HashedUrl)
 	if fresh || err != nil {
-		dataBytes, err = h.c.Buildbot.FetchBuilders()
+		dataBytes, err = h.buildbot.FetchBuilders()
 		if err != nil {
 			return nil, err
 		}
 
-		if err := h.c.Cache.SetCache(h.c.HashedUrl, dataBytes); err != nil {
+		if err := h.cache.SetCache(h.cfg.HashedUrl, dataBytes); err != nil {
 			return nil, err
 		}
 	}
@@ -133,9 +137,9 @@ func (h BuildersHandler) fetchBuilders(fresh bool) (map[string]Builder, error) {
 		return nil, err
 	}
 
-	if h.c.FilterRegex != nil {
+	if h.cfg.FilterRegex != nil {
 		for key, _ := range data {
-			if !h.c.FilterRegex.MatchString(key) {
+			if !h.cfg.FilterRegex.MatchString(key) {
 				delete(data, key)
 			}
 		}
@@ -150,17 +154,19 @@ func (h BuildersHandler) GetBuilders(req *http.Request, r render.Render) {
 		fresh = false
 	}
 
-	if builders, err := h.fetchBuilders(fresh); err == nil {
-		r.JSON(200, builders)
-	} else {
+	builders, err := h.fetchBuilders(fresh)
+	if err != nil {
+		h.logger.Error(err)
 		r.Error(500)
+	} else {
+		r.JSON(200, builders)
 	}
 }
 
 func (h BuildersHandler) GetBuilder(params martini.Params, r render.Render) {
 	builder, err := h.fetchBuilder(params["id"])
 	if err != nil {
-		fmt.Println(err)
+		h.logger.Error(err)
 		r.Error(500)
 	} else {
 		r.JSON(200, builder)

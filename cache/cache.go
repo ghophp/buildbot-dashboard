@@ -47,10 +47,17 @@ func (c *Cache) GetPath() string {
 }
 
 func (c *Cache) SetCache(name string, data []byte) error {
+	if len(name) <= 0 {
+		return fmt.Errorf("invalid cache name")
+	}
 	return ioutil.WriteFile(c.path+name, data, 0777)
 }
 
 func (c *Cache) GetCache(name string) ([]byte, error) {
+	if len(name) <= 0 {
+		return nil, fmt.Errorf("invalid cache name")
+	}
+
 	f, err := os.Stat(c.path + name)
 	if os.IsNotExist(err) {
 		return nil, err

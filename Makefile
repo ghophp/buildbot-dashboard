@@ -6,6 +6,7 @@ BIN_NAME=buildbot-dashboard
 all: build test
 
 deps:
+	${GO} get github.com/op/go-logging
 	${GO} get gopkg.in/check.v1
 	${GO} get github.com/ghophp/render
 	${GO} get github.com/go-martini/martini
@@ -16,7 +17,8 @@ deps:
 
 build: deps
 build:
-	${GO} build -o ${BIN_NAME}
+	${GO} build -o bin/latest/${BIN_NAME}
+	echo -n bin/latest/${BIN_NAME} | openssl dgst -sha1 -hmac "key"
 
 test: deps
 test:
@@ -26,4 +28,4 @@ test:
 	${GO} test github.com/ghophp/buildbot-dashboard/handler
 
 clean:
-	rm ${BIN_NAME}
+	rm -rf bin/latest/${BIN_NAME}

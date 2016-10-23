@@ -4,19 +4,42 @@ import (
 	"html/template"
 	"strconv"
 
+	bb "github.com/ghophp/buildbot-dashboard/buildbot"
+	cc "github.com/ghophp/buildbot-dashboard/cache"
 	"github.com/ghophp/buildbot-dashboard/config"
-	"github.com/ghophp/buildbot-dashboard/container"
 	"github.com/ghophp/buildbot-dashboard/handler"
 
 	"github.com/ghophp/render"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/staticbin"
+	"github.com/op/go-logging"
 )
 
-func NewRouter(c *container.ContainerBag) *martini.ClassicMartini {
+const LoggerPrefix = "BUILDBOT-DASHBOARD"
+
+var log = logging.MustGetLogger(LoggerPrefix)
+
+// Log format string. Everything except the message has a custom color
+// which is dependent on the log level. Many fields have a custom output
+// formatting too, eg. the time returns the hour down to the milli second.
+var format = logging.MustStringFormatter(
+	`%{color}%{time:15:04:05.000} %{shortfunc} ▶ %{level:.4s} %{id:03x}%{color:reset} %{message}`,
+)
+
+func main() {
+	logging.SetFormatter(format)
+
+	cfg, err := config.NewConfig(&config.FlagLoader{})
+	if err != nil {
+		panic(err)
+	}
+
 	var (
-		indexHandler    = handler.NewIndexHandler(c)
-		buildersHandler = handler.NewBuildersHandler(c)
+		cache    = cc.NewCache(cfg.CacheInvalidate)
+		buildbot = bb.NewBuildbotApi(cfg.BuildBotUrl, log)
+
+		indexHandler    = handler.NewIndexHandler()
+		buildersHandler = handler.NewBuildersHandler(cfg, buildbot, cache, log)
 	)
 
 	router := martini.Classic()
@@ -30,13 +53,13 @@ func NewRouter(c *container.ContainerBag) *martini.ClassicMartini {
 		Funcs: []template.FuncMap{
 			{
 				"refreshSec": func() string {
-					return strconv.Itoa(c.RefreshSec)
+					return strconv.Itoa(cfg.RefreshSec)
 				},
 				"buildbotUrl": func() string {
-					return c.Buildbot.GetUrl()
+					return buildbot.GetUrl()
 				},
 				"hashedUrl": func() string {
-					return c.HashedUrl
+					return cfg.HashedUrl
 				},
 			},
 		},
@@ -46,14 +69,5 @@ func NewRouter(c *container.ContainerBag) *martini.ClassicMartini {
 	router.Get("/builders", buildersHandler.GetBuilders)
 	router.Get("/builder/:id", buildersHandler.GetBuilder)
 
-	return router
-}
-
-func main() {
-	cfg, err := config.NewConfig(&config.FlagLoader{})
-	if err != nil {
-		panic(err)
-	}
-
-	NewRouter(container.NewContainerBag(cfg)).Run()
+	router.Run()
 }

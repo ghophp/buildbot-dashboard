@@ -8,10 +8,13 @@ import (
 )
 
 func (s *HandlerSuite) TestIndexMustReturnOK(c *gc.C) {
-	ctx := GetNewContainerBag(c, "http://10.0.0.1", "")
-	router := GetNewTestRouter(ctx)
+	var (
+		cfg      = GetNewTestConfig(c, "http://10.0.0.1", "")
+		buildbot = &MockBuildbotApi{url: cfg.BuildBotUrl}
+		router   = GetNewTestRouter(cfg, buildbot)
+		handler  = NewIndexHandler()
+	)
 
-	handler := NewIndexHandler(ctx)
 	router.Get("/foobar", handler.ServeHTTP)
 
 	res := httptest.NewRecorder()
