@@ -42,7 +42,6 @@ var BuildWidget = React.createClass({
         return this.getConfigUrl() +"builds/" + this.getLastBuildNumber();
     },
     render: function() {
-
         var loadingEl = null;
         if (this.state.status === 'building') {
             loadingEl = React.createElement(LoadingWidget, {});

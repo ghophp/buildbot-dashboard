@@ -1,18 +1,11 @@
 package handler
 
-import (
-	"github.com/ghophp/buildbot-dashboard/container"
-	"github.com/ghophp/render"
-)
+import "github.com/ghophp/render"
 
-type IndexHandler struct {
-	c *container.ContainerBag
-}
+type IndexHandler struct{}
 
-func NewIndexHandler(c *container.ContainerBag) *IndexHandler {
-	return &IndexHandler{
-		c: c,
-	}
+func NewIndexHandler() *IndexHandler {
+	return &IndexHandler{}
 }
 
 func (h IndexHandler) ServeHTTP(r render.Render) {

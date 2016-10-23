@@ -1,8 +1,11 @@
 package buildbot
 
 import (
+	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/op/go-logging"
 )
 
 type Buildbot interface {
@@ -12,11 +15,12 @@ type Buildbot interface {
 }
 
 type BuildbotApi struct {
-	url string
+	url    string
+	logger *logging.Logger
 }
 
-func NewBuildbotApi(buildbotUrl string) *BuildbotApi {
-	return &BuildbotApi{url: buildbotUrl}
+func NewBuildbotApi(buildbotUrl string, logger *logging.Logger) *BuildbotApi {
+	return &BuildbotApi{url: buildbotUrl, logger: logger}
 }
 
 func (api *BuildbotApi) GetUrl() string {
@@ -24,7 +28,10 @@ func (api *BuildbotApi) GetUrl() string {
 }
 
 func (api *BuildbotApi) FetchBuilder(id string) ([]byte, error) {
-	req, err := http.Get(api.url + "json/builders/" + id + "/builds?select=-1&select=-1&as_text=1")
+	builderUrl := api.url + "json/builders/" + id + "/builds?select=-1&select=-1&as_text=1"
+	api.logger.Debug(fmt.Sprintf("ready to fetch %s", builderUrl))
+
+	req, err := http.Get(builderUrl)
 	if err != nil {
 		return nil, err
 	}
@@ -39,7 +46,10 @@ func (api *BuildbotApi) FetchBuilder(id string) ([]byte, error) {
 }
 
 func (api *BuildbotApi) FetchBuilders() ([]byte, error) {
-	req, err := http.Get(api.url + "json/builders/?as_text=1")
+	buidersUrl := api.url + "json/builders/?as_text=1"
+	api.logger.Debug(fmt.Sprintf("ready to fetch %s", buidersUrl))
+
+	req, err := http.Get(buidersUrl)
 	if err != nil {
 		return nil, err
 	}

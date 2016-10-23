@@ -25,6 +25,16 @@ func (s *CacheSuite) SetUpTest(c *gc.C) {
 	os.Remove(usr.HomeDir + string(filepath.Separator) + InternalCacheFolder)
 }
 
+func (s *CacheSuite) TestSetCacheEmptyNameShouldReturnError(c *gc.C) {
+	cache := NewCache(10)
+
+	err := cache.SetCache("", []byte("test content"))
+	c.Check(err, gc.NotNil)
+
+	_, err = cache.GetCache("")
+	c.Check(err, gc.NotNil)
+}
+
 func (s *CacheSuite) TestSetCacheShouldCreateFile(c *gc.C) {
 	cache := NewCache(10)
 	cache.SetCache("test", []byte("test content"))

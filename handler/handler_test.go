@@ -1,17 +1,16 @@
 package handler
 
 import (
+	"fmt"
 	"html/template"
 	"strconv"
 	"testing"
 
+	bb "github.com/ghophp/buildbot-dashboard/buildbot"
 	"github.com/ghophp/buildbot-dashboard/config"
-	"github.com/ghophp/buildbot-dashboard/container"
+
 	"github.com/ghophp/render"
 	"github.com/go-martini/martini"
-
-	"fmt"
-
 	gc "gopkg.in/check.v1"
 )
 
@@ -35,7 +34,7 @@ func (f *MockLoader) Load(cfg *config.Config) {
 	cfg.BuildBotUrl = f.url
 	cfg.RefreshSec = 10
 	cfg.CacheInvalidate = 10
-	cfg.Filter = f.filter
+	cfg.FilterStr = f.filter
 }
 
 func (api *MockBuildbotApi) GetUrl() string {
@@ -71,7 +70,8 @@ func (api *MockBuildbotApi) FetchBuilder(id string) ([]byte, error) {
 }
 
 func (api *MockBuildbotApi) FetchBuilders() ([]byte, error) {
-	if api.url == "test_url" {
+	fmt.Println(fmt.Sprintf("try to fetch %s", api.url))
+	if api.url == "test_url/" {
 		return nil, fmt.Errorf("test error")
 	}
 
@@ -103,7 +103,7 @@ func (api *MockBuildbotApi) FetchBuilders() ([]byte, error) {
 	return []byte(json), nil
 }
 
-func GetNewContainerBag(c *gc.C, url string, filter string) *container.ContainerBag {
+func GetNewTestConfig(c *gc.C, url string, filter string) *config.Config {
 	cfg, err := config.NewConfig(&MockLoader{
 		url:    url,
 		filter: filter,
@@ -113,13 +113,10 @@ func GetNewContainerBag(c *gc.C, url string, filter string) *container.Container
 		c.Error(err)
 	}
 
-	ctn := container.NewContainerBag(cfg)
-	ctn.Buildbot = &MockBuildbotApi{url: url}
-
-	return ctn
+	return cfg
 }
 
-func GetNewTestRouter(ctx *container.ContainerBag) *martini.ClassicMartini {
+func GetNewTestRouter(cfg *config.Config, buildbot bb.Buildbot) *martini.ClassicMartini {
 	m := martini.Classic()
 	m.Use(martini.Static("../static/assets"))
 	m.Use(render.Renderer(render.Options{
@@ -131,13 +128,13 @@ func GetNewTestRouter(ctx *container.ContainerBag) *martini.ClassicMartini {
 		Funcs: []template.FuncMap{
 			{
 				"refreshSec": func() string {
-					return strconv.Itoa(ctx.RefreshSec)
+					return strconv.Itoa(cfg.RefreshSec)
 				},
 				"buildbotUrl": func() string {
-					return ctx.Buildbot.GetUrl()
+					return buildbot.GetUrl()
 				},
 				"hashedUrl": func() string {
-					return ctx.HashedUrl
+					return cfg.HashedUrl
 				},
 			},
 		},
