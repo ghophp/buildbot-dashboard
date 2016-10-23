@@ -24,7 +24,6 @@ test: deps
 test:
 	${GO} test github.com/ghophp/buildbot-dashboard/cache
 	${GO} test github.com/ghophp/buildbot-dashboard/config
-	${GO} test github.com/ghophp/buildbot-dashboard/container
 	${GO} test github.com/ghophp/buildbot-dashboard/handler
 
 clean:

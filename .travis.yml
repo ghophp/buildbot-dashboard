@@ -3,6 +3,10 @@ language: go
 go:
   - 1.6
 
+os:
+  - linux
+  - osx
+
 script:
   - make test
 
