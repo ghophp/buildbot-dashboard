@@ -35,7 +35,7 @@ func main() {
 	}
 
 	var (
-		cache    = cc.NewCache(cfg.CacheInvalidate)
+		cache    = cc.NewFileCache()
 		buildbot = bb.NewBuildbotApi(cfg.BuildBotUrl, log)
 
 		indexHandler    = handler.NewIndexHandler()

@@ -36,7 +36,7 @@ func (s *ConfigSuite) TestNewConfigShouldHaveDefaultValues(c *gc.C) {
 
 	c.Check(cfg.BuildBotUrl, gc.Equals, "http://10.0.0.1/")
 	c.Check(cfg.RefreshSec, gc.Equals, 20)
-	c.Check(cfg.CacheInvalidate, gc.Equals, 5)
+	c.Check(cfg.CacheInvalidate, gc.Equals, 300)
 	c.Check(cfg.FilterStr, gc.Equals, "test")
 	c.Check(cfg.FilterRegex, gc.NotNil)
 }

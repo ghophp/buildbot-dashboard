@@ -36,7 +36,7 @@ type (
 	BuildersHandler struct {
 		cfg      *config.Config
 		buildbot bb.Buildbot
-		cache    *cc.Cache
+		cache    cc.Cache
 		logger   *logging.Logger
 	}
 
@@ -61,7 +61,7 @@ type (
 	}
 )
 
-func NewBuildersHandler(cfg *config.Config, buildbot bb.Buildbot, cache *cc.Cache, logger *logging.Logger) *BuildersHandler {
+func NewBuildersHandler(cfg *config.Config, buildbot bb.Buildbot, cache cc.Cache, logger *logging.Logger) *BuildersHandler {
 	return &BuildersHandler{cfg, buildbot, cache, logger}
 }
 
@@ -75,18 +75,28 @@ func isValidState(v string) bool {
 }
 
 func (h BuildersHandler) fetchBuilder(id string) (*Builder, error) {
-	var b map[string]DetailedBuilder
+	var data map[string]DetailedBuilder
 
-	data, err := h.buildbot.FetchBuilder(id)
+	dataBytes, err := h.cache.GetCache(h.cfg.HashedUrl + "_" + id)
 	if err != nil {
+		h.logger.Errorf("failed to retrieve from cache %s", err)
+
+		dataBytes, err = h.buildbot.FetchBuilder(id)
+		if err != nil {
+			return nil, err
+		}
+
+		err = h.cache.SetCache(h.cfg.HashedUrl+"_"+id, dataBytes, 10)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	if err := json.Unmarshal(dataBytes, &data); err != nil {
 		return nil, err
 	}
 
-	if err := json.Unmarshal(data, &b); err != nil {
-		return nil, err
-	}
-
-	if current, ok := b["-1"]; ok && current.Error == "" {
+	if current, ok := data["-1"]; ok && current.Error == "" {
 		builder := &Builder{
 			Id:         id,
 			Blame:      current.Blame,
@@ -123,12 +133,17 @@ func (h BuildersHandler) fetchBuilders(fresh bool) (map[string]Builder, error) {
 
 	dataBytes, err := h.cache.GetCache(h.cfg.HashedUrl)
 	if fresh || err != nil {
+		if err != nil {
+			h.logger.Errorf("failed to retrieve from cache %s", err)
+		}
+
 		dataBytes, err = h.buildbot.FetchBuilders()
 		if err != nil {
 			return nil, err
 		}
 
-		if err := h.cache.SetCache(h.cfg.HashedUrl, dataBytes); err != nil {
+		err = h.cache.SetCache(h.cfg.HashedUrl, dataBytes, h.cfg.CacheInvalidate)
+		if err != nil {
 			return nil, err
 		}
 	}
