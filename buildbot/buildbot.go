@@ -1,10 +1,10 @@
 package buildbot
 
 import (
-	"fmt"
-	"io/ioutil"
-	"net/http"
+	"errors"
+	"strings"
 
+	"github.com/ghophp/buildbot-dashboard/pool"
 	"github.com/op/go-logging"
 )
 
@@ -16,11 +16,12 @@ type Buildbot interface {
 
 type BuildbotApi struct {
 	url    string
+	pool   pool.Pool
 	logger *logging.Logger
 }
 
-func NewBuildbotApi(buildbotUrl string, logger *logging.Logger) *BuildbotApi {
-	return &BuildbotApi{url: buildbotUrl, logger: logger}
+func NewBuildbotApi(buildbotUrl string, pool pool.Pool, logger *logging.Logger) *BuildbotApi {
+	return &BuildbotApi{url: buildbotUrl, pool: pool, logger: logger}
 }
 
 func (api *BuildbotApi) GetUrl() string {
@@ -28,37 +29,35 @@ func (api *BuildbotApi) GetUrl() string {
 }
 
 func (api *BuildbotApi) FetchBuilder(id string) ([]byte, error) {
-	builderUrl := api.url + "json/builders/" + id + "/builds?select=-1&select=-1&as_text=1"
-	api.logger.Debug(fmt.Sprintf("ready to fetch %s", builderUrl))
+	var (
+		builderUrl = api.url + "json/builders/" + id + "/builds?select=-1&select=-1&as_text=1"
+		listener   = make(chan string)
+	)
 
-	req, err := http.Get(builderUrl)
-	if err != nil {
-		return nil, err
+	api.pool.Fetch(builderUrl, listener)
+
+	select {
+	case resp := <-listener:
+		if strings.Contains(resp, pool.RequestError) {
+			return nil, errors.New(resp)
+		}
+		return []byte(resp), nil
 	}
-
-	b, err := ioutil.ReadAll(req.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Body.Close()
-	return b, nil
 }
 
 func (api *BuildbotApi) FetchBuilders() ([]byte, error) {
-	buidersUrl := api.url + "json/builders/?as_text=1"
-	api.logger.Debug(fmt.Sprintf("ready to fetch %s", buidersUrl))
+	var (
+		buidersUrl = api.url + "json/builders/?as_text=1"
+		listener   = make(chan string)
+	)
 
-	req, err := http.Get(buidersUrl)
-	if err != nil {
-		return nil, err
+	api.pool.Fetch(buidersUrl, listener)
+
+	select {
+	case resp := <-listener:
+		if strings.Contains(resp, pool.RequestError) {
+			return nil, errors.New(resp)
+		}
+		return []byte(resp), nil
 	}
-
-	b, err := ioutil.ReadAll(req.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Body.Close()
-	return b, nil
 }
