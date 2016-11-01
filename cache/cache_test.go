@@ -26,9 +26,9 @@ func (s *CacheSuite) SetUpTest(c *gc.C) {
 }
 
 func (s *CacheSuite) TestSetCacheEmptyNameShouldReturnError(c *gc.C) {
-	cache := NewCache(10)
+	cache := NewFileCache()
 
-	err := cache.SetCache("", []byte("test content"))
+	err := cache.SetCache("", []byte("test content"), 10)
 	c.Check(err, gc.NotNil)
 
 	_, err = cache.GetCache("")
@@ -36,16 +36,16 @@ func (s *CacheSuite) TestSetCacheEmptyNameShouldReturnError(c *gc.C) {
 }
 
 func (s *CacheSuite) TestSetCacheShouldCreateFile(c *gc.C) {
-	cache := NewCache(10)
-	cache.SetCache("test", []byte("test content"))
+	cache := NewFileCache()
+	cache.SetCache("test", []byte("test content"), 10)
 
 	_, err := os.Stat(cache.GetPath() + "test")
 	c.Check(err, gc.IsNil)
 }
 
 func (s *CacheSuite) TestNonExistingKeyShouldReturnError(c *gc.C) {
-	cache := NewCache(10)
-	cache.SetCache("test", []byte("test content"))
+	cache := NewFileCache()
+	cache.SetCache("test", []byte("test content"), 10)
 
 	data, err := cache.GetCache("test")
 
@@ -54,8 +54,8 @@ func (s *CacheSuite) TestNonExistingKeyShouldReturnError(c *gc.C) {
 }
 
 func (s *CacheSuite) TestExpiredTimeShouldReturnError(c *gc.C) {
-	cache := NewCache(-1)
-	cache.SetCache("test", []byte("test content"))
+	cache := NewFileCache()
+	cache.SetCache("test", []byte("test content"), -1)
 
 	_, err := cache.GetCache("test")
 	c.Check(err, gc.NotNil)

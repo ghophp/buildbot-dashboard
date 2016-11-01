@@ -17,7 +17,7 @@ func SendGetBuildersRequest(cfg *config.Config) *httptest.ResponseRecorder {
 	var (
 		buildbot = &MockBuildbotApi{url: cfg.BuildBotUrl}
 		router   = GetNewTestRouter(cfg, buildbot)
-		handler  = NewBuildersHandler(cfg, buildbot, cc.NewCache(cfg.CacheInvalidate), logging.MustGetLogger("test"))
+		handler  = NewBuildersHandler(cfg, buildbot, cc.NewFileCache(), logging.MustGetLogger("test"))
 	)
 
 	router.Get("/builders", handler.GetBuilders)
@@ -33,7 +33,7 @@ func SendGetBuilder(cfg *config.Config, id string) *httptest.ResponseRecorder {
 	var (
 		buildbot = &MockBuildbotApi{url: cfg.BuildBotUrl}
 		router   = GetNewTestRouter(cfg, buildbot)
-		handler  = NewBuildersHandler(cfg, buildbot, cc.NewCache(cfg.CacheInvalidate), logging.MustGetLogger("test"))
+		handler  = NewBuildersHandler(cfg, buildbot, cc.NewFileCache(), logging.MustGetLogger("test"))
 	)
 
 	router.Get("/builder/:id", handler.GetBuilder)
