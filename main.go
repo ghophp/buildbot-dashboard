@@ -8,6 +8,7 @@ import (
 	cc "github.com/ghophp/buildbot-dashboard/cache"
 	"github.com/ghophp/buildbot-dashboard/config"
 	"github.com/ghophp/buildbot-dashboard/handler"
+	"github.com/ghophp/buildbot-dashboard/pool"
 
 	"github.com/ghophp/render"
 	"github.com/go-martini/martini"
@@ -36,7 +37,7 @@ func main() {
 
 	var (
 		cache    = cc.NewFileCache()
-		buildbot = bb.NewBuildbotApi(cfg.BuildBotUrl, log)
+		buildbot = bb.NewBuildbotApi(cfg.BuildBotUrl, pool.NewRequestPool(), log)
 
 		indexHandler    = handler.NewIndexHandler()
 		buildersHandler = handler.NewBuildersHandler(cfg, buildbot, cache, log)
