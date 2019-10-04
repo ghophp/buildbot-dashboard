@@ -3,17 +3,17 @@ package config
 import (
 	"crypto/md5"
 	"encoding/hex"
-	"flag"
 	"fmt"
 	"regexp"
 )
 
 const (
-	minRefreshRate  int = 20
-	cacheInvalidate int = 300
+	MinRefreshRate  int = 20
+	CacheInvalidate int = 300
 )
 
 type Config struct {
+	StaticPath      string
 	BuildBotUrl     string
 	HashedUrl       string
 	FilterStr       string
@@ -22,24 +22,33 @@ type Config struct {
 	CacheInvalidate int
 }
 
-type ConfigLoader interface {
-	Load(cfg *Config)
+// Loader defines the behaviour to load the values from
+// multiple sources that will populate the config
+type Loader interface {
+	Load(*Config)
 }
 
-type FlagLoader struct{}
+func NewConfig(loaders []Loader) (*Config, error) {
+	if loaders == nil || len(loaders) <= 0 {
+		return nil, fmt.Errorf("NewConfig %v", "no loader provided")
+	}
 
-func (f *FlagLoader) Load(cfg *Config) {
-	flag.StringVar(&cfg.BuildBotUrl, "buildbot", "", "buildbot url eg. http://10.0.0.1/")
-	flag.IntVar(&cfg.RefreshSec, "refresh", minRefreshRate, "refresh rate in seconds (default and min 30 seconds)")
-	flag.IntVar(&cfg.CacheInvalidate, "invalidate", cacheInvalidate, "cache invalidate in seconds (default and min 300 seconds)")
-	flag.StringVar(&cfg.FilterStr, "filter", "", "regex applied over the builder name")
+	var (
+		cfg    = new(Config)
+		loaded = false
+	)
 
-	flag.Parse()
-}
+	for _, l := range loaders {
+		l.Load(cfg)
+		if err := cfg.Validate(); err == nil {
+			loaded = true
+			break
+		}
+	}
 
-func NewConfig(loader ConfigLoader) (*Config, error) {
-	cfg := &Config{}
-	loader.Load(cfg)
+	if !loaded {
+		return nil, fmt.Errorf("NewConfig %v", "invalid configuration provided")
+	}
 
 	hasher := md5.New()
 	hasher.Write([]byte(cfg.BuildBotUrl + cfg.FilterStr))
@@ -54,19 +63,22 @@ func NewConfig(loader ConfigLoader) (*Config, error) {
 	cfg.HashedUrl = hex.EncodeToString(hasher.Sum(nil))
 	cfg.FilterRegex = filter
 
-	if len(cfg.BuildBotUrl) <= 0 {
-		return nil, fmt.Errorf("NewConfig %s", "no buildbot url informed")
-	}
-
 	if cfg.BuildBotUrl[len(cfg.BuildBotUrl)-1:] != "/" {
 		cfg.BuildBotUrl = cfg.BuildBotUrl + "/"
 	}
-	if cfg.RefreshSec < minRefreshRate {
-		cfg.RefreshSec = minRefreshRate
+	if cfg.RefreshSec < MinRefreshRate {
+		cfg.RefreshSec = MinRefreshRate
 	}
-	if cfg.CacheInvalidate < cacheInvalidate {
-		cfg.CacheInvalidate = cacheInvalidate
+	if cfg.CacheInvalidate < CacheInvalidate {
+		cfg.CacheInvalidate = CacheInvalidate
 	}
 
 	return cfg, nil
+}
+
+func (c *Config) Validate() error {
+	if len(c.BuildBotUrl) <= 0 {
+		return fmt.Errorf("Config.Validate %s", "no buildbot url informed")
+	}
+	return nil
 }

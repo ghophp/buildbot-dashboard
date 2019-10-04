@@ -1,27 +1,17 @@
 language: go
 
 go:
-  - 1.6
-
-os:
-  - linux
-  - osx
+  - 1.13.x
 
 script:
   - make test
+  - make coverage
 
 before_deploy:
-  - make build
+  - make build.docker
 
 deploy:
-  - provider: s3
-    access_key_id: "${AWS_ID}"
-    secret_access_key: "${AWS_SECRET}"
-    local-dir: bin/latest
-    skip_cleanup: true
-    upload-dir: "${TRAVIS_BRANCH}/${TRAVIS_OS_NAME}"
-    bucket: "buildbot-dashboard"
-    region: "eu-west-1"
-    acl: public_read
+  - provider: script
+    script: bash script/docker_push
     on:
-      all_branches: true
+      branch: master

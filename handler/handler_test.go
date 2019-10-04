@@ -9,8 +9,8 @@ import (
 	bb "github.com/ghophp/buildbot-dashboard/buildbot"
 	"github.com/ghophp/buildbot-dashboard/config"
 
-	"github.com/ghophp/render"
 	"github.com/go-martini/martini"
+	"github.com/martini-contrib/render"
 	gc "gopkg.in/check.v1"
 )
 
@@ -104,10 +104,10 @@ func (api *MockBuildbotApi) FetchBuilders() ([]byte, error) {
 }
 
 func GetNewTestConfig(c *gc.C, url string, filter string) *config.Config {
-	cfg, err := config.NewConfig(&MockLoader{
+	cfg, err := config.NewConfig([]config.Loader{&MockLoader{
 		url:    url,
 		filter: filter,
-	})
+	}})
 
 	if err != nil {
 		c.Error(err)

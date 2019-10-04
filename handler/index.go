@@ -1,6 +1,6 @@
 package handler
 
-import "github.com/ghophp/render"
+import "github.com/martini-contrib/render"
 
 type IndexHandler struct{}
 
