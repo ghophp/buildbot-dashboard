@@ -19,89 +19,100 @@
   </section>
 
   <section class="main-content">
-    <h1><a id="buildbotdashing_Join_the_chat_at_httpsgitterimghophpbuildbotdashboardhttpsbadgesgitterimJoin20Chatsvghttpsgitterimghophpbuildbotdashboardutm_sourcebadgeutm_mediumbadgeutm_campaignprbadgeutm_contentbadge_0"></a>buildbot-dashing <a href="https://gitter.im/ghophp/buildbot-dashboard?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Join the chat at https://gitter.im/ghophp/buildbot-dashboard"></a></h1>
-<p>If you have a CI/CD setup, it is really important to keep a central display and follow the builds and process going on the CI tool. This project aims to be the dashboard that will allow you to do present better results at a central display with <code>buildbot</code>.</p>
-<h2><a id="Download_Build_Statushttpssemaphorecicomapiv1projects44130239880c468f9fa7b976a355676a611030badgesvghttpssemaphorecicomghophpbuildbotdashboard_3"></a>Download <a href="https://travis-ci.org/ghophp/buildbot-dashboard"><img src="https://travis-ci.org/ghophp/buildbot-dashboard.svg?branch=master" alt="Build Status"></a> <a href="https://coveralls.io/github/ghophp/buildbot-dashboard?branch=master"><img src="https://coveralls.io/repos/github/ghophp/buildbot-dashboard/badge.svg?branch=master" alt="Build Status"></a></h2>
-<p>The project has some precompiled binaries, if your enviroment match one of the releases above, this is the most simple way to use this project.</p>
-<table>
-<thead>
-<tr>
-<th>OS</th>
-<th>Arch</th>
-<th>Size</th>
-<th>SHA1 Binary</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="https://s3-eu-west-1.amazonaws.com/buildbot-dashboard/master/osx/buildbot-dashboard">OSX</a></td>
-<td>64-bit</td>
-<td>6,5MB</td>
-<td>2df4875acc7127bca5f3a74ad556b641d668eeb5</td>
-</tr>
-<tr>
-<td><a href="https://s3-eu-west-1.amazonaws.com/buildbot-dashboard/master/linux/buildbot-dashboard">Linux</a></td>
-<td>64-bit</td>
-<td>6,5MB</td>
-<td>b8990466151cddc6097e5af84f15f420b366aa6e</td>
-</tr>
-</tbody>
-</table>
-<p>How to use with <a href="https://github.com/ghophp/buildbot-dashboard/wiki/runit">runit</a>.</p>
-<h2><a id="Running_9"></a>Running</h2>
-<p><code>buildbot</code> is the only required flag, you must provide the base url of the running builbot.</p>
-<pre><code class="language-sh">$ ./buildbot_dashboard -h
+      <h1 id="buildbotdashboardjointhechatathttpsgitterimghophpbuildbotdashboardhttpsbadgesgitterimjoin20chatsvghttpsgitterimghophpbuildbotdashboardutm_sourcebadgeutm_mediumbadgeutm_campaignprbadgeutm_contentbadgebuildstatushttpstravisciorgghophpbuildbotdashboardsvgbranchmasterhttpstravisciorgghophpbuildbotdashboardcoveragestatushttpscoverallsioreposgithubghophpbuildbotdashboardbadgesvgbranchmasterhttpscoverallsiogithubghophpbuildbotdashboardbranchmaster">buildbot-dashboard <a href="https://gitter.im/ghophp/buildbot-dashboard?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Join the chat at https://gitter.im/ghophp/buildbot-dashboard" /></a> <a href="https://travis-ci.org/ghophp/buildbot-dashboard"><img src="https://travis-ci.org/ghophp/buildbot-dashboard.svg?branch=master" alt="Build Status" /></a> <a href="https://coveralls.io/github/ghophp/buildbot-dashboard?branch=master"><img src="https://coveralls.io/repos/github/ghophp/buildbot-dashboard/badge.svg?branch=master" alt="Coverage Status" /></a></h1>
+
+      <p>If you have a CI/CD setup, it is really important to keep a central display and follow the builds and process going on the CI tool. This project aims to be the dashboard that will allow you to do present better results at a central display with <code>buildbot</code>.</p>
+
+      <h2 id="features">Features</h2>
+
+      <ul>
+          <li>Non-reload monitoring</li>
+
+          <li>Enhanced UI with better visualization of the builders</li>
+
+          <li>Easy usage with single command</li>
+
+          <li><code>Filter</code> options allow you to just show what matters</li>
+
+          <li>Save arrangement of the dashboard</li>
+
+          <li><code>Zoom compliant</code> layout</li>
+      </ul>
+
+      <h2 id="preview">Preview</h2>
+
+      <p><img src="https://github.com/ghophp/buildbot-dashboard/blob/master/preview/preview_apache.gif?raw=true" alt="Apache Board" title="Apache Board" /></p>
+
+      <p>As we use gridster and a structured style, if your buildbot has a lot of builders, you can take advantage of the <code>browser zoom</code> to reduce the size of the blocks and so, use more space to move your grid.</p>
+
+      <p><img src="https://github.com/ghophp/buildbot-dashboard/blob/master/preview/preview_apache_small.gif?raw=true" alt="Apache Board Small" title="Apache Board Small" /></p>
+
+      <h2 id="runningwithdocker">Running with Docker</h2>
+
+      <pre><code class="bash language-bash">$ docker run \
+    -e "STATIC_PATH=/go/src/github.com/ghophp/buildbot-dashboard/static/" \
+    -e "BUILDBOT_URL=https://ci.apache.org" \
+    -e "PORT=8000" \
+    -e "MARTINI_ENV=development" \
+    -p 127.0.0.1:8000:8000/tcp ghophp/buildbot-dashboard
+</code></pre>
+
+      <p>Or if you have clone/downloaded the repository you can run locally with:</p>
+
+      <pre><code class="bash language-bash">$ make run.docker
+</code></pre>
+
+      <p>This will build the image with the name <code>ghophp/buildbot-dashboard</code> and run it with the <code>.env.example</code> file if no <code>.env</code> file is present at the directory. To use other environment variables, please create a <code>.env</code> file next to the <code>.env.example</code> file.</p>
+
+      <h2 id="runningfrombinary">Running from Binary</h2>
+
+      <p>First you have to build the project for you current architecture:</p>
+
+      <pre><code class="bash language-bash">$ make build.local
+$ make build.linux.armv8
+$ make build.linux.armv7
+$ make build.linux
+$ make build.osx
+$ make build.windows
+</code></pre>
+
+      <p>This will yield a binary into the bin folder, which can be executed, <code>buildbot</code> is the only required flag, you must provide the base url of the running builbot.</p>
+
+      <pre><code class="sh language-sh">$ ./buildbot_dashboard -h
 -buildbot string
-    buildbot url eg. http://<span class="hljs-number">10.0</span>.<span class="hljs-number">0.1</span>/
+    buildbot url eg. http://10.0.0.1/
 -filter string
     regex applied over the builder name
 -invalidate int
-    cache invalidate <span class="hljs-keyword">in</span> seconds (default and min <span class="hljs-number">5</span> minutes) (default <span class="hljs-number">10</span>)
+    cache invalidate in seconds (default and min 5 minutes) (default 10)
 -refresh int
-    refresh rate <span class="hljs-keyword">in</span> seconds (default and min <span class="hljs-number">10</span> seconds) (default <span class="hljs-number">10</span>)
+    refresh rate in seconds (default and min 20 seconds) (default 20)
 </code></pre>
-<h2><a id="Manual_Build_34"></a>Manual Build</h2>
-<p>As this project is built in <code>go</code> you can build it in multiple platforms with:</p>
-<pre><code class="language-sh">$ go get -u github.com/ghophp/buildbot-dashboard
-$ <span class="hljs-built_in">cd</span> <span class="hljs-variable">$GOPATH</span>/src/github.com/ghophp/buildbot-dashboard
-$ ./install.sh
-</code></pre>
-<p>This will fetch the code and generate the assets as binary, then you can <code>go install</code> or <code>go build</code>, and then run:</p>
-<pre><code class="language-sh">$ buildbot-dashboard --buildbot=<span class="hljs-string">"http://10.0.0.1/"</span>
-</code></pre>
-<p>If you have <code>$GOPATH/bin</code> at your <code>$PATH</code> then you can run from everywhere the command.</p>
-<p>You can also run with the <code>go run</code> with:</p>
-<pre><code class="language-sh">$ go run *.go -builbot=<span class="hljs-string">"http://10.0.0.1/"</span>
-</code></pre>
-<h2><a id="Features_52"></a>Features</h2>
-<ul>
-<li>Non-reload monitoring</li>
-<li>Enhanced UI with better visualization of the builders</li>
-<li>Easy usage with single command</li>
-<li><code>Filter</code> options allow you to just show what matters</li>
-<li>Save arrangement of the dashboard</li>
-<li><code>Zoom compliant</code> layout</li>
-</ul>
-<h2><a id="Preview_60"></a>Preview</h2>
-<p><img src="https://github.com/ghophp/buildbot-dashboard/raw/master/preview/preview_apache.gif?raw=true" alt="Apache Board" title="Apache Board"></p>
-<p>As we use gridster and a structured style, if your buildbot has a lot of builders, you can take advantage of the <code>browser zoom</code> to reduce the size of the blocks and so, use more space to move your grid.</p>
-<p><img src="https://github.com/ghophp/buildbot-dashboard/raw/master/preview/preview_apache_small.gif?raw=true" alt="Apache Board Small" title="Apache Board Small"></p>
-<h2><a id="Port_and_Logs_27"></a>Martini</h2>
-<p>As this project is build over <code>martini</code> please consider setting this <code>env variables</code> when deploy:</p>
-<pre><code class="language-sh"><span class="hljs-built_in">export</span> PORT=<span class="hljs-number">3000</span>
-<span class="hljs-built_in">export</span> MARTINI_ENV=production
-</code></pre>
-<h2><a id="Clean_Cache_62"></a>Clean Cache</h2>
-<p>By default the project will cache the builders to avoid the delay of reloading it everytime. If you insert a new builder or remove one, you can force the reload of the cache in the UI, there is <a href="https://github.com/ghophp/buildbot-dashboard/wiki/">a button on left side</a>. This button will force the builders to be reloaded and the localStorage will also be cleaned.</p>
-<hr>
-<p>Thanks to <a href="https://github.com/nbari">nbari</a> and <a href="https://luckymarmot.com/paw">paw</a> for helping and supporting open source.</p>
-<p><img src="https://github.com/ghophp/buildbot-dashboard/raw/master/preview/paw.png" alt=""></p>
-    <footer class="site-footer">
-      <span class="site-footer-owner"><a href="https://github.com/ghophp/buildbot-dashboard">buildbot-dashboard</a> is maintained by <a href="https://github.com/ghophp">ghophp</a>.</span>
 
-      <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
-    </footer>
+      <p>How to use with <a href="https://github.com/ghophp/buildbot-dashboard/wiki/runit">runit</a>.</p>
 
+      <h2 id="runningwithgorun">Running with go run</h2>
+
+      <pre><code class="sh language-sh">$ BUILDBOT_URL="https://ci.apache.org" PORT=8000 MARTINI_ENV=development make run.local
+</code></pre>
+
+      <h2 id="martini">Martini</h2>
+
+      <p>As this project is build over <code>martini</code> please consider setting this <code>env variables</code> when deploy:</p>
+
+      <pre><code class="sh language-sh">export PORT=3000
+export MARTINI_ENV=production
+</code></pre>
+
+      <h2 id="cleancache">Clean Cache</h2>
+
+      <p>By default the project will cache the builders to avoid the delay of reloading it every time. If you insert a new builder or remove one, you can force the reload of the cache in the UI, there is <a href="https://github.com/ghophp/buildbot-dashboard/wiki/">a button on left side</a>. This button will force the builders to be reloaded and the localStorage will also be cleaned.</p>
+
+      <hr />
+
+      <p>Thanks to <a href="https://github.com/nbari">nbari</a> and <a href="https://luckymarmot.com/paw">paw</a> for helping and supporting open source.</p>
+
+      <p><img src="https://github.com/ghophp/buildbot-dashboard/blob/master/preview/paw.png?raw=true" alt="" /></p>
   </section>
 </body>
 </html>
