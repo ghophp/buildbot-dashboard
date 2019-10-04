@@ -47,7 +47,7 @@ test:
 	go test -v $(GOPKGS)
 
 coverage:
-	go get -u github.com/mattn/goveralls
+	GO111MODULE=off go get -u github.com/mattn/goveralls
 	./script/coverage.sh --coveralls
 
 clean:
