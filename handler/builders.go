@@ -12,8 +12,8 @@ import (
 	"github.com/ghophp/buildbot-dashboard/config"
 	"github.com/op/go-logging"
 
-	"github.com/ghophp/render"
 	"github.com/go-martini/martini"
+	"github.com/martini-contrib/render"
 )
 
 const (

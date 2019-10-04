@@ -2,17 +2,19 @@ package main
 
 import (
 	"html/template"
+	"os"
 	"strconv"
 
 	bb "github.com/ghophp/buildbot-dashboard/buildbot"
 	cc "github.com/ghophp/buildbot-dashboard/cache"
 	"github.com/ghophp/buildbot-dashboard/config"
+	"github.com/ghophp/buildbot-dashboard/config/env"
+	"github.com/ghophp/buildbot-dashboard/config/flag"
 	"github.com/ghophp/buildbot-dashboard/handler"
 	"github.com/ghophp/buildbot-dashboard/pool"
 
-	"github.com/ghophp/render"
 	"github.com/go-martini/martini"
-	"github.com/martini-contrib/staticbin"
+	"github.com/martini-contrib/render"
 	"github.com/op/go-logging"
 )
 
@@ -30,7 +32,10 @@ var format = logging.MustStringFormatter(
 func main() {
 	logging.SetFormatter(format)
 
-	cfg, err := config.NewConfig(&config.FlagLoader{})
+	cfg, err := config.NewConfig([]config.Loader{
+		flag.NewFlagLoader(),
+		env.NewEnvLoader(),
+	})
 	if err != nil {
 		panic(err)
 	}
@@ -43,10 +48,19 @@ func main() {
 		buildersHandler = handler.NewBuildersHandler(cfg, buildbot, cache, log)
 	)
 
+	var staticPath = "./static/"
+	if len(cfg.StaticPath) > 0 {
+		staticPath = cfg.StaticPath
+	}
+
+	if _, err := os.Stat(staticPath); os.IsNotExist(err) {
+		panic(err)
+	}
+
 	router := martini.Classic()
-	router.Use(staticbin.Static("static/assets", Asset))
-	router.Use(render.RendererBin(Asset, AssetNames(), render.Options{
-		Directory:  "static/templates",
+	router.Use(martini.Static(staticPath + "assets"))
+	router.Use(render.Renderer(render.Options{
+		Directory:  staticPath + "templates",
 		Layout:     "layout",
 		Extensions: []string{".tmpl", ".html"},
 		Charset:    "UTF-8",
